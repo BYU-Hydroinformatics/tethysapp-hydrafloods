@@ -25,12 +25,20 @@ def home(request):
     sentinel1 = Button(
         display_text = 'Sentinel 1',
         name = 'sentinel1',
-        # attributes = 
-        # style = 
+        attributes={
+            'sensor':'1',
+            'product':'SAR',
+            'id': 'sentinel1_button'
+        }
     )
     landsat8 = Button(
         display_text = 'Landsat 8',
         name = 'landsat8',
+        attributes={
+            'sensor':'8',
+            'product':'RAW',
+            'id': 'landsat8_button'
+        }
     )
     
     platform_select = ButtonGroup(buttons = [sentinel1, landsat8])
@@ -46,27 +54,27 @@ def home(request):
     # )
 
     #Build initial sensor control
-    sensor_options = []
+    # sensor_options = []
 
-    for sensor in default_sensors:
-        sensor_options.append((sensor.upper(), sensor))
+    # for sensor in default_sensors:
+    #     sensor_options.append((sensor.upper(), sensor))
 
-    sensor_select = SelectInput(
-        name='sensor',
-        display_text='Sensor',
-        options=sensor_options
-    )
+    # sensor_select = SelectInput(
+    #     name='sensor',
+    #     display_text='Sensor',
+    #     options=sensor_options
+    # )
 
-    # Build initial product control
-    product_options = []
-    for product, info in default_products.items():
-        product_options.append((info['display'], product))
+    # # Build initial product control
+    # product_options = []
+    # for product, info in default_products.items():
+    #     product_options.append((info['display'], product))
 
-    product_select = SelectInput(
-        name='product',
-        display_text='Product',
-        options=product_options
-    )
+    # product_select = SelectInput(
+    #     name='product',
+    #     display_text='Product',
+    #     options=product_options
+    # )
 
     region_select = SelectInput(
         name = 'region',
@@ -174,8 +182,8 @@ def home(request):
 
     context = {
         'platform_select': platform_select,
-        'sensor_select': sensor_select,
-        'product_select': product_select,
+        # 'sensor_select': sensor_select,
+        # 'product_select': 'SAR',
         'region_select': region_select,
         'start_date': start_date,
         'end_date': end_date,

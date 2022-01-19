@@ -29,7 +29,7 @@ var GEE_DATASETS = (function() {
     *                    PRIVATE FUNCTION DECLARATIONS
     *************************************************************************/
     // Dataset Select Methods
-    var bind_controls, update_product_options, update_sensor_options, update_date_bounds, collect_data;
+    var bind_controls, update_product_options, update_sensor_options, update_date_bounds, collect_data, sentinel_button_func, landsat_button_func;
 
     // Map Methods
     var update_map, update_data_layer, create_data_layer, clear_map;
@@ -107,8 +107,36 @@ var GEE_DATASETS = (function() {
         $('#clear_map').on('click', function() {
             clear_map();
         });
-        
+
+        $('#sentinel1_button').on('click', function() {
+            sentinel_button_func();
+        });
+
+        $('#landsat8_button').on('click', function() {
+            landsat_button_func();
+        });
     };
+
+    sentinel_button_func =  function(){
+        let sensor = $("#sentinel1_button").attr("sensor");
+        let product = $("#sentinel1_button").attr("product");
+        $("#terrain_correction_id").show();
+        $("#speckle_filter_id").show();
+        $("#cloud_mask_id").hide();
+        $("#terrain_correction_p").show();
+        $("#speckle_filter_p").show();
+        $("#cloud_mask_p").hide();
+    }
+      landsat_button_func =  function(){
+        let sensor = $("#landsat8_button").attr("sensor");
+        let product = $("#landsat8_button").attr("product");
+        $("#terrain_correction_id").hide();
+        $("#speckle_filter_id").hide();
+        $("#cloud_mask_id").show();
+        $("#terrain_correction_p").hide();
+        $("#speckle_filter_p").hide();
+        $("#cloud_mask_p").show();
+    }
 
     update_sensor_options = function() {
         if (!m_platform in EE_PRODUCTS) {

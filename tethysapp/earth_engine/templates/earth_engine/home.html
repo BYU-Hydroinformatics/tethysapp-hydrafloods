@@ -8,15 +8,34 @@
 {% endblock %}
 
 {% block app_navigation_items %}
-  <li class="title">Select Dataset</li>
+<li class="separator"></li>  
+<b class="title">Dataset</b>
+  <p class="separator"></p>
   {% gizmo platform_select %}
-  {% gizmo sensor_select %}
-  {% gizmo product_select %}
+  <p class="separator"></p>
   {% gizmo region_select %}
   {% gizmo start_date %}
   {% gizmo end_date %}
   {% gizmo reducer_select %}
-  <p class="help">Change variables to select a data product, then press "Load" to add that product to the map.</p>
+  <li id = "terrain_correction_p"><strong>Terrain Correction</strong></li>
+  <select name="terrain_correction_name" id="terrain_correction_id">
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+  <p class="separator"></p>
+  <li id="speckle_filter_p"><strong>Speckle Filter</strong></li>
+  <select name="speckle_filter_name" id="speckle_filter_id">
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+  <p class="separator"></p>
+  <li id="cloud_mask_p"><strong>Cloud Mask</strong></li>
+  <select name="cloud_mask_name" id="cloud_mask_id">
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+  <p class="separator"></p>
+  <p class="help">Change variables to select a dataset, then press "Load" to add that product to the map.</p>
   {% gizmo load_button %}
   {% gizmo clear_button %}
 {% endblock %}
