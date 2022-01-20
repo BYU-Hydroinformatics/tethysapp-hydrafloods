@@ -76,19 +76,6 @@ def home(request):
     #     options=product_options
     # )
 
-    region_select = SelectInput(
-        name = 'region',
-        display_text = "Region",
-        options = (
-            ('America', 'america'),
-            ('Japan', 'japan'),
-            ('Colombia', 'colombia'),
-            ('Guatemala', 'Guatemala'),
-            ('Mexico', 'mexico'),
-            ('Brazil', 'brazil'),
-        )
-    )
-
     # Hardcode initial end date to today (since all of our datasets extend to present)
     today = dt.datetime.today()
     initial_end_date = today.strftime('%Y-%m-%d')
@@ -135,7 +122,6 @@ def home(request):
         display_text='Reduction Method',
         options=(
             ('Median', 'median'),
-            ('Mosaic', 'mosaic'),
             ('Mode', 'mode'),
             ('Mean', 'mean'),
             ('Minimum', 'min'),
@@ -174,17 +160,16 @@ def home(request):
     )
 
     clear_button = Button(
-    name='clear_map',
-    display_text='Clear',
-    style='default',
-    attributes={'id': 'clear_map'}
+        name='clear_map',
+        display_text='Clear',
+        style='default',
+        attributes={'id': 'clear_map'}
     )
 
     context = {
         'platform_select': platform_select,
         # 'sensor_select': sensor_select,
         # 'product_select': 'SAR',
-        'region_select': region_select,
         'start_date': start_date,
         'end_date': end_date,
         'reducer_select': reducer_select,

@@ -3,6 +3,9 @@
 
 {% block content_dependent_styles %}
     {{ block.super }}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
     <link rel="stylesheet" href="{% static 'earth_engine/css/map.css' %}" />
     <link rel="stylesheet" href="{% static 'earth_engine/css/loader.css' %}" />
 {% endblock %}
@@ -13,7 +16,6 @@
   <p class="separator"></p>
   {% gizmo platform_select %}
   <p class="separator"></p>
-  {% gizmo region_select %}
   {% gizmo start_date %}
   {% gizmo end_date %}
   {% gizmo reducer_select %}
@@ -41,7 +43,7 @@
 {% endblock %}
 
 {% block app_content %}
-  {% gizmo map_view %}
+  <div id="map"></div>
 {% endblock %}
 
 {# Use the after_app_content block for modals #}
@@ -54,5 +56,8 @@
 
 {% block scripts %}
   {{ block.super }}
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
   <script src="{% static 'earth_engine/js/gee_datasets.js' %}" type="text/javascript"></script>
 {% endblock %}
