@@ -34,6 +34,12 @@ class EarthEngine(TethysAppBase):
                 url='earth-engine/get-image-collection',
                 controller='earth_engine.controllers.get_image_collection'
             ),
+            UrlMap(
+                name='get_image_layer',
+                url='get-image-layer/',
+                controller='earth_engine.controllers.retrieve_layer'
+            )
+            
         )
 
         return url_maps

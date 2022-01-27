@@ -85,6 +85,39 @@ $(function() {
         drawnItems.addLayer(e.layer);
         input_spatial = JSON.stringify(e.layer.toGeoJSON());
         type_of_series = e.layerType;
+        let reducer = $('#reducer').val();
+        let end_date = $('#end_date').val();
+        let start_date = $('#start_date').val();
+        let terrain =  $("#terrain_correction_id").val();
+        let speckle =  $("#speckle_filter_id").val();
+        let cloud = $("#cloud_mask_id").val();
+
+        var request_obj={
+            'input_spatial':input_spatial,
+            'reducer': reducer,
+            'start_date': start_date,
+            'end_date': end_date,
+            'terrain': terrain,
+            'speckle': speckle,
+            'cloud': cloud
+        }
+        console.log(request_obj);
+        $.ajax({
+            type:"GET",
+            url:'get-image-layer/',
+            datatype:"JSON",
+            data:request_obj,
+            success: function(data){
+                console.log(data)
+            },
+            error: function(error){
+                console.log(error)
+
+            }
+
+            
+            
+        })
       });
  
     $.ajaxSetup({

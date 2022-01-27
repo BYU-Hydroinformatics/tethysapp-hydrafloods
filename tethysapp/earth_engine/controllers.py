@@ -1,7 +1,7 @@
 import datetime as dt
 from django.shortcuts import render
 from tethys_sdk.permissions import login_required
-from tethys_sdk.gizmos import SelectInput, DatePicker, Button, MapView, MVView, ButtonGroup
+from tethys_sdk.gizmos import SelectInput, DatePicker, Button, MapView, MVView, ButtonGroup, ToggleSwitch
 from .gee.products import EE_PRODUCTS
 import logging
 from django.http import JsonResponse, HttpResponseNotAllowed
@@ -173,6 +173,7 @@ def home(request):
         'start_date': start_date,
         'end_date': end_date,
         'reducer_select': reducer_select,
+        'terrain_correction': terrain_correction,
         'load_button': load_button,
         'clear_button': clear_button,
         'ee_products': EE_PRODUCTS,
@@ -220,4 +221,9 @@ def get_image_collection(request):
     except Exception as e:
         response_data['error'] = f'Error Processing Request: {e}'
 
+    return JsonResponse(response_data)
+
+def retrieve_layer(request):
+    print("calling retrieve_layers")
+    response_data = {}
     return JsonResponse(response_data)
