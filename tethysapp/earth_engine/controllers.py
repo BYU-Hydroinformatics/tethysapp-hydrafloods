@@ -25,6 +25,7 @@ def home(request):
     sentinel1 = Button(
         display_text = 'Sentinel 1',
         name = 'sentinel1',
+        style = 'primary',
         attributes={
             'sensor':'1',
             'product':'SAR',
@@ -34,6 +35,7 @@ def home(request):
     landsat8 = Button(
         display_text = 'Landsat 8',
         name = 'landsat8',
+        style = 'primary',
         attributes={
             'sensor':'8',
             'product':'RAW',
@@ -173,7 +175,6 @@ def home(request):
         'start_date': start_date,
         'end_date': end_date,
         'reducer_select': reducer_select,
-        'terrain_correction': terrain_correction,
         'load_button': load_button,
         'clear_button': clear_button,
         'ee_products': EE_PRODUCTS,
