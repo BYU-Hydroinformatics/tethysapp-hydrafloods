@@ -24,7 +24,7 @@ function csrfSafeMethod(method) {
 function creationMaps(){
     var vector_obj = {};
     var baseMapsNames = [
-        'ArcGIS:DarkGray', 
+        'ArcGIS:DarkGray',
         'ArcGIS:Navigation',
         'ArcGIS:DarkGray:Base',
         'ArcGIS:NavigationNight',
@@ -53,13 +53,17 @@ $(function() {
     //Start Map //
     var map = L.map('map').setView([8.913648, -79.544706], 10);
 
+    var water_layer = L.tileLayer('',{attribution:
+          '<a href="https://earthengine.google.com" target="_">' +
+          'Google Earth Engine</a>;'}).addTo(map).bringToFront();
+
     var baseMaps = creationMaps();
     console.log(baseMaps)
     L.esri.Vector.vectorBasemapLayer('ArcGIS:Navigation', {
         apikey: "AAPK052bec1846714415aed2c85ddfa15f73KYexWiKoe0Au2nFQprFm_CWnafrYs4Y3MwTI3iqb-QBEwR808TRyXrudF4Za40V-" // Replace with your API key - https://developers.arcgis.com
     }).addTo(map);
-    L.control.layers(baseMaps,{},{position: 'bottomleft'}).addTo(map);
 
+    L.control.layers(baseMaps,{"water":water_layer},{position: 'bottomleft'}).addTo(map);
 
      // FeatureGroup is to store editable layers
      drawnItems = new L.FeatureGroup().addTo(map);   // FeatureGroup is to store editable layers
@@ -109,17 +113,18 @@ $(function() {
             data:request_obj,
             success: function(data){
                 console.log(data)
+                water_layer.setUrl(data.url)
             },
             error: function(error){
                 console.log(error)
 
             }
 
-            
-            
+
+
         })
       });
- 
+
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {

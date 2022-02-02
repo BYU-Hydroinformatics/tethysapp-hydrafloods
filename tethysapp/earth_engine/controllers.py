@@ -5,7 +5,8 @@ from tethys_sdk.gizmos import SelectInput, DatePicker, Button, MapView, MVView, 
 from .gee.products import EE_PRODUCTS
 import logging
 from django.http import JsonResponse, HttpResponseNotAllowed
-from .gee.methods import get_image_collection_asset
+from .gee.methods import sentinel1,get_tile_url
+import json
 
 log = logging.getLogger(f'tethys.apps.{__name__}')
 
@@ -42,7 +43,7 @@ def home(request):
             'id': 'landsat8_button'
         }
     )
-    
+
     platform_select = ButtonGroup(buttons = [sentinel1, landsat8])
 
     # Build initial platform control
@@ -226,5 +227,30 @@ def get_image_collection(request):
 
 def retrieve_layer(request):
     print("calling retrieve_layers")
-    response_data = {}
+    response_data = {'success': False}
+
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    try:
+        log.debug(f'GET: {request.GET}')
+
+        region = request.GET.get('input_spatial', None)
+        start_date = request.GET.get('start_date', None)
+        end_date = request.GET.get('end_date', None)
+
+
+        img = sentinel1(json.loads(region),start_date,end_date)
+        url = get_tile_url(img.selfMask(), {"min":0,"max":1,"palette": "darkblue"})
+
+        log.debug(f'Image Collection URL: {url}')
+
+        response_data.update({
+            'success': True,
+            'url': url
+        })
+
+    except Exception as e:
+        response_data['error'] = f'Error Processing Request: {e}'
+
     return JsonResponse(response_data)

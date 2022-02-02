@@ -1,6 +1,7 @@
 import logging
 import ee
 from ee.ee_exception import EEException
+import hydrafloods as hf
 from . import params as gee_account
 from .products import EE_PRODUCTS
 from . import cloud_mask as cm
@@ -48,7 +49,7 @@ def get_image_collection_asset(platform, sensor, product, date_from=None, date_t
     ee_product = EE_PRODUCTS[platform][sensor][product]
 
     collection = ee_product['collection']
-      
+
     index = ee_product.get('index', None)
     vis_params = ee_product.get('vis_params', {})
     cloud_mask = ee_product.get('cloud_mask', None)
@@ -62,7 +63,7 @@ def get_image_collection_asset(platform, sensor, product, date_from=None, date_t
 
         if product == "SAR":
             ee_collection = ee_collection.filter(ee.Filter.listContains("transmitterReceiverPolarisation", index))
-  
+
 
         if date_from and date_to:
             ee_filter_date = ee.Filter.date(date_from, date_to)
@@ -86,3 +87,34 @@ def get_image_collection_asset(platform, sensor, product, date_from=None, date_t
     except EEException:
         log.exception('An error occurred while attempting to retrieve the image collection asset.')
 
+def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_speckle_filter=True,force_projection=True):
+
+    region = ee.Feature(region).geometry()
+    ds = hf.Sentinel1(region,start_time,end_time)
+
+    proc = []
+    if apply_terrain_correction:
+        elv = ee.Image("NASA/NASADEM_HGT/001").select("elevation").unmask(0)
+        buffer = 50
+        proc.append([hf.slope_correction,dict(elevation=elv,buffer=buffer)])
+
+    if apply_speckle_filter:
+        proc.append(hf.gamma_map)
+
+    proc.append([hf.edge_otsu, dict(edge_buffer=300,initial_threshold=-16,scale=120)])
+
+    if force_projection:
+        proc.append(lambda x: x.reproject(ee.Projection("EPSG:4326").atScale(30)))
+
+    water = ds.pipe(proc)
+
+    return water.collection.mode()
+
+def landsat8(region,start_time,end_time):
+
+    return
+
+
+def get_tile_url(ee_image,vis_params):
+    map_id_dict = ee.Image(ee_image).getMapId(vis_params)
+    return map_id_dict['tile_fetcher'].url_format
