@@ -57,13 +57,24 @@ $(function() {
           '<a href="https://earthengine.google.com" target="_">' +
           'Google Earth Engine</a>;'}).addTo(map).bringToFront();
 
-    var baseMaps = creationMaps();
-    console.log(baseMaps)
-    L.esri.Vector.vectorBasemapLayer('ArcGIS:Navigation', {
-        apikey: "AAPK052bec1846714415aed2c85ddfa15f73KYexWiKoe0Au2nFQprFm_CWnafrYs4Y3MwTI3iqb-QBEwR808TRyXrudF4Za40V-" // Replace with your API key - https://developers.arcgis.com
-    }).addTo(map);
+    var image_layer = L.tileLayer('',{attribution:
+          '<a href="https://earthengine.google.com" target="_">' +
+          'Google Earth Engine</a>;'}).addTo(map);
 
-    L.control.layers(baseMaps,{"water":water_layer},{position: 'bottomleft'}).addTo(map);
+
+    // var baseMaps = creationMaps();
+    // console.log(baseMaps)
+    // L.esri.Vector.vectorBasemapLayer('ArcGIS:Navigation', {
+    //     apikey: "AAPK052bec1846714415aed2c85ddfa15f73KYexWiKoe0Au2nFQprFm_CWnafrYs4Y3MwTI3iqb-QBEwR808TRyXrudF4Za40V-" // Replace with your API key - https://developers.arcgis.com
+    // }).addTo(map);
+    var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+          attribution: '©OpenStreetMap, ©CartoDB'
+        }).addTo(map);
+
+    var baseMaps = {"Basemap":positron}
+    var varMaps = {"satellite observation":image_layer,"water":water_layer,}
+
+    L.control.layers(baseMaps,varMaps,{position: 'bottomleft'}).addTo(map);
 
      // FeatureGroup is to store editable layers
      drawnItems = new L.FeatureGroup().addTo(map);   // FeatureGroup is to store editable layers
@@ -113,7 +124,8 @@ $(function() {
             data:request_obj,
             success: function(data){
                 console.log(data)
-                water_layer.setUrl(data.url)
+                water_layer.setUrl(data.water_url)
+                image_layer.setUrl(data.image_url)
             },
             error: function(error){
                 console.log(error)
