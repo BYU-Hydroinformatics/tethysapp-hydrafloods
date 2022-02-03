@@ -240,14 +240,16 @@ def retrieve_layer(request):
         end_date = request.GET.get('end_date', None)
 
 
-        img = sentinel1(json.loads(region),start_date,end_date)
-        url = get_tile_url(img.selfMask(), {"min":0,"max":1,"palette": "darkblue"})
+        imgs = sentinel1(json.loads(region),start_date,end_date)
+        wurl = get_tile_url(imgs["water"].selfMask(), {"min":0,"max":1,"palette": "darkblue"})
+        surl = get_tile_url(imgs["satellite"], {"bands":"VV","min":-25,"max":0})
 
-        log.debug(f'Image Collection URL: {url}')
+        # log.debug(f'Image Collection URL: {url}')
 
         response_data.update({
             'success': True,
-            'url': url
+            'water_url': wurl,
+            'image_url': surl
         })
 
     except Exception as e:
