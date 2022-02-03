@@ -108,7 +108,7 @@ def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_spe
 
     water = ds.pipe(proc)
 
-    return water.collection.mode()
+    return {"satellite":ds.collection.mean(),"water": water.collection.mode()}
 
 def landsat8(region,start_time,end_time):
 
