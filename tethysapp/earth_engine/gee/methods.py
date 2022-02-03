@@ -3,8 +3,26 @@ import ee
 from ee.ee_exception import EEException
 import hydrafloods as hf
 from . import params as gee_account
-from .products import EE_PRODUCTS
-from . import cloud_mask as cm
+# from . import cloud_mask as cm
+
+
+EE_PRODUCTS = {
+    'sentinel': {
+        '1': {
+            'SAR':{
+                'display': 'SAR',
+                'collection': 'COPERNICUS/S1_GRD',
+                'index': 'VV',
+                'vis_params': {
+                    'min': -25,
+                    'max': 0,
+                },
+                'start_date': '2014-10-03',
+                'end_date': None  # to present
+            }
+        },
+    },
+}
 
 log = logging.getLogger(f'tethys.apps.{__name__}')
 
@@ -42,50 +60,50 @@ def image_to_map_id(image_name, vis_params={}):
         log.exception('An error occurred while attempting to retrieve the map id.')
 
 
-def get_image_collection_asset(platform, sensor, product, date_from=None, date_to=None, reducer='median'):
-    """
-    Get tile url for image collection asset.
-    """
-    ee_product = EE_PRODUCTS[platform][sensor][product]
+# def get_image_collection_asset(platform, sensor, product, date_from=None, date_to=None, reducer='median'):
+#     """
+#     Get tile url for image collection asset.
+#     """
+#     ee_product = EE_PRODUCTS[platform][sensor][product]
 
-    collection = ee_product['collection']
+#     collection = ee_product['collection']
 
-    index = ee_product.get('index', None)
-    vis_params = ee_product.get('vis_params', {})
-    cloud_mask = ee_product.get('cloud_mask', None)
+#     # index = ee_product.get('index', None)
+#     # vis_params = ee_product.get('vis_params', {})
+#     # cloud_mask = ee_product.get('cloud_mask', None)
 
-    log.debug(f'Image Collection Name: {collection}')
-    log.debug(f'Band Selector: {index}')
-    log.debug(f'Vis Params: {vis_params}')
+#     log.debug(f'Image Collection Name: {collection}')
+#     log.debug(f'Band Selector: {index}')
+#     log.debug(f'Vis Params: {vis_params}')
 
-    try:
-        ee_collection = ee.ImageCollection(collection)
+#     try:
+#         ee_collection = ee.ImageCollection(collection)
 
-        if product == "SAR":
-            ee_collection = ee_collection.filter(ee.Filter.listContains("transmitterReceiverPolarisation", index))
+#         if product == "SAR":
+#             ee_collection = ee_collection.filter(ee.Filter.listContains("transmitterReceiverPolarisation", index))
 
 
-        if date_from and date_to:
-            ee_filter_date = ee.Filter.date(date_from, date_to)
-            ee_collection = ee_collection.filter(ee_filter_date)
+#         if date_from and date_to:
+#             ee_filter_date = ee.Filter.date(date_from, date_to)
+#             ee_collection = ee_collection.filter(ee_filter_date)
 
-        if index:
-            ee_collection = ee_collection.select(index)
+#         if index:
+#             ee_collection = ee_collection.select(index)
 
-        if cloud_mask:
-            cloud_mask_func = getattr(cm, cloud_mask, None)
-            if cloud_mask_func:
-                ee_collection = ee_collection.map(cloud_mask_func)
+#         # if cloud_mask:
+#         #     cloud_mask_func = getattr(cm, cloud_mask, None)
+#         #     if cloud_mask_func:
+#         #         ee_collection = ee_collection.map(cloud_mask_func)
 
-        if reducer:
-            ee_collection = getattr(ee_collection, reducer)()
+#         if reducer:
+#             ee_collection = getattr(ee_collection, reducer)()
 
-        tile_url = image_to_map_id(ee_collection, vis_params)
+#         tile_url = image_to_map_id(ee_collection, vis_params)
 
-        return tile_url
+#         return tile_url
 
-    except EEException:
-        log.exception('An error occurred while attempting to retrieve the image collection asset.')
+#     except EEException:
+#         log.exception('An error occurred while attempting to retrieve the image collection asset.')
 
 def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_speckle_filter=True,force_projection=True):
 
