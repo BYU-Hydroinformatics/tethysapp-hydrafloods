@@ -2,10 +2,10 @@ import datetime as dt
 from django.shortcuts import render
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import SelectInput, DatePicker, Button, MapView, MVView, ButtonGroup, ToggleSwitch
-from .gee.products import EE_PRODUCTS
+# from .gee.products import EE_PRODUCTS
 import logging
 from django.http import JsonResponse, HttpResponseNotAllowed
-from .gee.methods import sentinel1,get_tile_url
+# from .gee.methods import sentinel1,get_tile_url
 import json
 
 log = logging.getLogger(f'tethys.apps.{__name__}')
@@ -16,12 +16,12 @@ def home(request):
     """
     Controller for the app home page.
     """
-    default_platform = 'sentinel'
-    default_sensors = EE_PRODUCTS[default_platform]
-    first_sensor_key = next(iter(default_sensors.keys()))
-    default_products = default_sensors[first_sensor_key]
-    first_product_key = next(iter(default_products.keys()))
-    first_product = default_products[first_product_key]
+    # default_platform = 'sentinel'
+    # default_sensors = EE_PRODUCTS[default_platform]
+    # first_sensor_key = next(iter(default_sensors.keys()))
+    # default_products = default_sensors[first_sensor_key]
+    # first_product_key = next(iter(default_products.keys()))
+    # first_product = default_products[first_product_key]
 
     sentinel1 = Button(
         display_text = 'Sentinel 1',
@@ -80,18 +80,23 @@ def home(request):
     # )
 
     # Hardcode initial end date to today (since all of our datasets extend to present)
-    today = dt.datetime.today()
-    initial_end_date = today.strftime('%Y-%m-%d')
+    # today = dt.datetime.today()
+    # initial_end_date = today.strftime('%Y-%m-%d')
 
-    # Initial start date will a set number of days before the end date
-    # NOTE: This assumes the start date of the dataset is at least 30+ days prior to today
-    initial_end_date_dt = dt.datetime.strptime(initial_end_date, '%Y-%m-%d')
-    initial_start_date_dt = initial_end_date_dt - dt.timedelta(days=30)
-    initial_start_date = initial_start_date_dt.strftime('%Y-%m-%d')
+    # # Initial start date will a set number of days before the end date
+    # # NOTE: This assumes the start date of the dataset is at least 30+ days prior to today
+    # initial_end_date_dt = dt.datetime.strptime(initial_end_date, '%Y-%m-%d')
+    # initial_start_date_dt = initial_end_date_dt - dt.timedelta(days=30)
+    # initial_start_date = initial_start_date_dt.strftime('%Y-%m-%d')
 
-    # Build date controls
-    first_product_start_date = first_product.get('start_date', None)
-    first_product_end_date = first_product.get('end_date', None) or initial_end_date
+    # # Build date controls
+    # first_product_start_date = first_product.get('start_date', None)
+    # first_product_end_date = first_product.get('end_date', None) or initial_end_date
+
+    initial_start_date = '2022-01-05'
+    initial_end_date = '2022-01-06'
+    first_product_end_date = '2022-02-02'
+    first_product_start_date = '2010-01-01'
 
     start_date = DatePicker(
         name='start_date',
@@ -178,7 +183,6 @@ def home(request):
         'reducer_select': reducer_select,
         'load_button': load_button,
         'clear_button': clear_button,
-        'ee_products': EE_PRODUCTS,
         'map_view': map_view
     }
 
