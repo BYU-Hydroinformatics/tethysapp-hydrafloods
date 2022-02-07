@@ -100,7 +100,6 @@ $(function() {
         drawnItems.addLayer(e.layer);
         input_spatial = JSON.stringify(e.layer.toGeoJSON());
         type_of_series = e.layerType;
-        let reducer = $('#reducer').val();
         let end_date = $('#end_date').val();
         let start_date = $('#start_date').val();
         let terrain =  $("#terrain_correction_id").val();
@@ -109,7 +108,6 @@ $(function() {
 
         var request_obj={
             'input_spatial':input_spatial,
-            'reducer': reducer,
             'start_date': start_date,
             'end_date': end_date,
             'terrain': terrain,
@@ -131,9 +129,6 @@ $(function() {
                 console.log(error)
 
             }
-
-
-
         })
       });
 

@@ -2,10 +2,9 @@ import datetime as dt
 from django.shortcuts import render
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import SelectInput, DatePicker, Button, MapView, MVView, ButtonGroup, ToggleSwitch
-# from .gee.products import EE_PRODUCTS
 import logging
 from django.http import JsonResponse, HttpResponseNotAllowed
-# from .gee.methods import sentinel1,get_tile_url
+from .gee.methods import sentinel1,get_tile_url
 import json
 
 log = logging.getLogger(f'tethys.apps.{__name__}')
@@ -16,12 +15,6 @@ def home(request):
     """
     Controller for the app home page.
     """
-    # default_platform = 'sentinel'
-    # default_sensors = EE_PRODUCTS[default_platform]
-    # first_sensor_key = next(iter(default_sensors.keys()))
-    # default_products = default_sensors[first_sensor_key]
-    # first_product_key = next(iter(default_products.keys()))
-    # first_product = default_products[first_product_key]
 
     sentinel1 = Button(
         display_text = 'Sentinel 1',
