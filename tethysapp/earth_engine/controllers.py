@@ -87,8 +87,8 @@ def home(request):
     # first_product_end_date = first_product.get('end_date', None) or initial_end_date
 
     initial_start_date = '2022-01-05'
-    initial_end_date = '2022-01-06'
-    first_product_end_date = '2022-02-02'
+    initial_end_date = '2022-01-25'
+    first_product_end_date = '2022-02-08'
     first_product_start_date = '2010-01-01'
 
     start_date = DatePicker(
@@ -130,7 +130,6 @@ def home(request):
         )
     )
 
-    # Build Buttons
     load_button = Button(
         name='load_map',
         display_text='Load',
