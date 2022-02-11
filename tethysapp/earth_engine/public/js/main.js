@@ -69,8 +69,16 @@ $(function() {
        },
      });
      map.addControl(drawControl);
+
+     // getting dataset from bottons
+     if($("#landsat8") == 'on') {
+         satelite = 'landsat8'
+     } else {
+         satelite = 'sentinel1'
+     }
+     
      $("#load_data").click(function(){
-         let dataset = $('#dataset_id').val();
+         let dataset = satelite;
          let end_date = $('#end_date').val();
          let start_date = $('#start_date').val();
          let terrain =  $("#terrain_correction_id").val();

@@ -3,20 +3,13 @@
 {% load static %}
 
 {% block app_navigation_items %}
-<li class="separator"></li>  
-<b class="title">Dataset</b>
-<p class="separator"></p>  
-  <!-- <p class="separator"></p>
-    <div class="btn-group" data-toggle="buttons">
-    <label class="btn btn-primary">
-      <input type="radio" name="sentinel1" id="dataset_id"> Sentinel 1
-    </label>
-    <label class="btn btn-primary">
-      <input type="radio" name="landsat8" id="dataset_id"> Landsat 8
-    </label>
-  </div> -->
-  <button type="button" class = "btn btn-primary" id="sentinel1">Sentinel 1</button>
-  <button type="button" class = "btn btn-primary" id="landsat8">Landsat 8</button>
+  <li class="separator"></li>  
+  <b class="title">Dataset</b>
+  <p class="separator"></p>
+  <div class="btn-group" data-toggle="buttons">
+    <button type="button" class = "btn btn-primary" id="sentinel1">Sentinel 1</button>
+    <button type="button" class = "btn btn-primary" id="landsat8">Landsat 8</button>
+  </div>
   <p class="separator"></p>
   {% gizmo start_date %}
   {% gizmo end_date %}
