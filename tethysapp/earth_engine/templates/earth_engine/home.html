@@ -2,13 +2,21 @@
 {% load tethys_gizmos static %}
 {% load static %}
 
-
-
 {% block app_navigation_items %}
 <li class="separator"></li>  
 <b class="title">Dataset</b>
-  <p class="separator"></p>
-  {% gizmo platform_select %}
+<p class="separator"></p>  
+  <!-- <p class="separator"></p>
+    <div class="btn-group" data-toggle="buttons">
+    <label class="btn btn-primary">
+      <input type="radio" name="sentinel1" id="dataset_id"> Sentinel 1
+    </label>
+    <label class="btn btn-primary">
+      <input type="radio" name="landsat8" id="dataset_id"> Landsat 8
+    </label>
+  </div> -->
+  <button type="button" class = "btn btn-primary" id="sentinel1">Sentinel 1</button>
+  <button type="button" class = "btn btn-primary" id="landsat8">Landsat 8</button>
   <p class="separator"></p>
   {% gizmo start_date %}
   {% gizmo end_date %}
@@ -32,18 +40,16 @@
   </select>
   <p class="separator"></p>
   <p class="help">Change variables to select a dataset, then press "Load" to add that product to the map.</p>
-  {% gizmo load_button %}
-  {% gizmo clear_button %}
+  <button type="button" class = "btn btn-primary" id="load_data">Load</button>
+  <button type="button" class = "btn btn-primary" id="clear_data">Clear</button>
 {% endblock %}
 
 {% block app_content %}
   <div id="map"></div>
+  <img id="GeneralLoading" class="view-file hidden" src="{% static 'earth_engine/images/loader.gif' %}" />
 {% endblock %}
 
 {# Use the after_app_content block for modals #}
 {% block after_app_content %}
   <div id="ee-products" data-ee-products="{{ ee_products|jsonify }}"></div>
-  <div id="loader">
-    <img src="{% static 'earth_engine/images/loading-map.gif' %}">
-  </div>
 {% endblock %}
