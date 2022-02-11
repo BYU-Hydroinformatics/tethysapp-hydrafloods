@@ -23,6 +23,7 @@ function csrfSafeMethod(method) {
 
 // add csrf token to appropriate ajax requests
 $(function() {
+    var satellite = "sentinel1";
     var input_spatial ="";
     //Start Map //
     var map = L.map('map').setView([8.913648, -79.544706], 10);
@@ -70,15 +71,28 @@ $(function() {
      });
      map.addControl(drawControl);
 
-     // getting dataset from bottons
-     if($("#landsat8") == 'on') {
-         satelite = 'landsat8'
-     } else {
-         satelite = 'sentinel1'
-     }
+     $("#landsat8").click(function(){
+        satellite = 'landsat8'
+        $("#terrain_correction_id").hide()
+        $("#speckle_filter_id").hide();
+        $("#cloud_mask_id").show();
+        $("#terrain_correction_p").hide()
+        $("#speckle_filter_p").hide();
+        $("#cloud_mask_p").show();
+     })
+
+     $("#sentinel1").click(function(){
+        satellite = 'sentinel1'
+        $("#terrain_correction_id").show()
+        $("#speckle_filter_id").show();
+        $("#cloud_mask_id").hide();
+        $("#terrain_correction_p").show()
+        $("#speckle_filter_p").show();
+        $("#cloud_mask_p").hide();
+     })
      
      $("#load_data").click(function(){
-         let dataset = satelite;
+         let dataset = satellite;
          let end_date = $('#end_date').val();
          let start_date = $('#start_date').val();
          let terrain =  $("#terrain_correction_id").val();
@@ -94,6 +108,7 @@ $(function() {
              'speckle': speckle,
              'cloud': cloud
          }
+
          console.log(request_obj);
          $("#GeneralLoading").removeClass("hidden");
          $.ajax({
@@ -102,24 +117,20 @@ $(function() {
              datatype:"JSON",
              data:request_obj,
              success: function(data){
+                $.notify("SUCCESS", "success");
                  $("#GeneralLoading").addClass("hidden");
                  console.log(data)
                  water_layer.setUrl(data.water_url)
                  image_layer.setUrl(data.image_url)
-                 // you need to make a pop up appear
-                 //1 create the pop in th html, your popup should have a button called close
-                 //2 make it appear $("#id").show();
-                
              },
              error: function(error){
+                $.notify("REQUEST FAILED", "error");
                  console.log(error)
                  $("#GeneralLoading").addClass("hidden");
-                  // you need to make a pop up appear
-                 //1 create the pop in th html, your popup should have a button called close
-                 //2 make it appear $("#id").show();
              }
          })
      })
+     
      map.on(L.Draw.Event.CREATED, function (e) {
             // console.log('Draw Event Created');
             drawnItems.addLayer(e.layer);
