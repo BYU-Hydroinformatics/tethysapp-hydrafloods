@@ -25,6 +25,10 @@ function csrfSafeMethod(method) {
 $(function() {
     var satellite = "sentinel1";
     var input_spatial ="";
+    terr_val = 'no';
+    spec_val = 'no';
+    cloud_val = 'no';
+
     //Start Map //
     var map = L.map('map').setView([8.913648, -79.544706], 10);
 
@@ -79,6 +83,8 @@ $(function() {
         $("#terrain_correction_p").hide()
         $("#speckle_filter_p").hide();
         $("#cloud_mask_p").show();
+        $('button').removeClass('active');
+        $(this).addClass('active');
      })
 
      $("#sentinel1").click(function(){
@@ -89,21 +95,37 @@ $(function() {
         $("#terrain_correction_p").show()
         $("#speckle_filter_p").show();
         $("#cloud_mask_p").hide();
+        $('button').removeClass('active');
+        $(this).addClass('active');
      })
      
+     $("#terrain_correction_id").click(function(){
+        terr_val = 'yes'
+    })
+
+    $("#speckle_filter_id").click(function(){
+        spec_val = 'yes'
+    })
+
+    $("#cloud_mask_id").click(function(){
+        cloud_val = 'yes'
+    })
+
      $("#load_data").click(function(){
          let dataset = satellite;
          let end_date = $('#end_date').val();
          let start_date = $('#start_date').val();
-         let terrain =  $("#terrain_correction_id").val();
-         let speckle =  $("#speckle_filter_id").val();
-         let cloud = $("#cloud_mask_id").val();
+         let red_method = $('#reducer').val();
+         let terrain =  terr_val;
+         let speckle =  spec_val;
+         let cloud = cloud_val;
  
          var request_obj={
              'input_spatial':input_spatial,
              'dataset' : dataset,
              'start_date': start_date,
              'end_date': end_date,
+             'red_method': red_method,
              'terrain': terrain,
              'speckle': speckle,
              'cloud': cloud
