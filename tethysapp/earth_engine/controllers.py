@@ -122,16 +122,19 @@ def retrieve_layer(request):
         region = request.GET.get('input_spatial', None)
         start_date = request.GET.get('start_date', None)
         end_date = request.GET.get('end_date', None)
+        speckle = True if request.GET.get('speckle', None) == "yes" else False
+        terrain = True if request.GET.get('terrain', None) == "yes" else False
+        cloud = True if request.GET.get('cloud', None) == "yes" else False
 
         sensor = request.GET.get('dataset', None)
 
         if sensor == "sentinel1":
-            imgs = sentinel1(json.loads(region),start_date,end_date)
+            imgs = sentinel1(json.loads(region),start_date,end_date, apply_terrain_correction=terrain,apply_speckle_filter=speckle)
             wurl = get_tile_url(imgs["water"].selfMask(), {"min":0,"max":1,"palette": "darkblue"})
             surl = get_tile_url(imgs["satellite"], {"bands":"VV","min":-25,"max":0})
 
         elif sensor == "landsat8":
-            imgs = landsat8(json.loads(region),start_date,end_date)
+            imgs = landsat8(json.loads(region),start_date,end_date,cloudmask=cloud)
             wurl = get_tile_url(imgs["water"].selfMask(), {"min":0,"max":1,"palette": "darkblue"})
             surl = get_tile_url(imgs["satellite"], {"bands":"swir2,nir,green","min":50,"max":5500})
 
