@@ -1,11 +1,17 @@
+import json
 import datetime as dt
 from django.shortcuts import render
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import SelectInput, DatePicker, Button, MapView, MVView
 import logging
 from django.http import JsonResponse, HttpResponseNotAllowed
-from .gee.methods import sentinel1, landsat8, get_tile_url
-import json
+from .gee.methods import (
+    sentinel1,
+    landsat8,
+    get_tile_url,
+    get_download_url
+)
+
 
 log = logging.getLogger(f'tethys.apps.{__name__}')
 
@@ -145,6 +151,48 @@ def retrieve_layer(request):
             'success': True,
             'water_url': wurl,
             'image_url': surl
+        })
+
+    except Exception as e:
+        response_data['error'] = f'Error Processing Request: {e}'
+
+    return JsonResponse(response_data)
+
+def export_layer(request):
+    print("calling export layer")
+    response_data = {'success': False}
+
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    try:
+        log.debug(f'GET: {request.GET}')
+
+        region = request.GET.get('input_spatial', None)
+        start_date = request.GET.get('start_date', None)
+        end_date = request.GET.get('end_date', None)
+        speckle = True if request.GET.get('speckle', None) == "yes" else False
+        terrain = True if request.GET.get('terrain', None) == "yes" else False
+        cloud = True if request.GET.get('cloud', None) == "yes" else False
+
+        sensor = request.GET.get('dataset', None)
+
+        if sensor == "sentinel1":
+            imgs = sentinel1(json.loads(region),start_date,end_date, apply_terrain_correction=terrain,apply_speckle_filter=speckle)
+
+        elif sensor == "landsat8":
+            imgs = landsat8(json.loads(region),start_date,end_date,cloudmask=cloud)
+
+        else:
+            raise NotImplementedError(f"sensor option {sensor} is not implemented")
+
+        img_join = imgs["satellite"].addBands(imgs["water"])
+
+        export_url = get_download_url(img_join, json.loads(region))
+
+        response_data.update({
+            'success': True,
+            'export_url': export_url,
         })
 
     except Exception as e:
