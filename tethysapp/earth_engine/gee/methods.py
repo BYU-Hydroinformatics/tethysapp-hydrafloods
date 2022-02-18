@@ -131,7 +131,7 @@ def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_spe
 def landsat8(region,start_time,end_time,cloudmask=True):
 
     region = ee.Feature(region).geometry()
-    ds = hf.Landsat8(region,start_time,end_time,)
+    ds = hf.Landsat8(region,start_time,end_time,use_qa=cloudmask)
 
     elv = ee.Image("NASA/NASADEM_HGT/001").select("elevation").unmask(0)
     proc = (
