@@ -75,6 +75,12 @@ $(function() {
      });
      map.addControl(drawControl);
 
+     // set initial ui to have sentinel1 button active
+     // and cloud mask opt hidden
+     $("#sentinel1").addClass('active');
+     $("#cloud_mask_p").hide();
+     $("#cloud_mask_id").hide();
+
      $("#landsat8").click(function(){
         satellite = 'landsat8'
         $("#terrain_correction_id").hide()
@@ -98,7 +104,7 @@ $(function() {
         $('button').removeClass('active');
         $(this).addClass('active');
      })
-     
+
      $("#terrain_correction_id").click(function(){
         terr_val = 'yes'
     })
@@ -119,7 +125,7 @@ $(function() {
          let terrain =  terr_val;
          let speckle =  spec_val;
          let cloud = cloud_val;
- 
+
          var request_obj={
              'input_spatial':input_spatial,
              'dataset' : dataset,
@@ -152,7 +158,7 @@ $(function() {
              }
          })
      })
-     
+
      map.on(L.Draw.Event.CREATED, function (e) {
             // console.log('Draw Event Created');
             drawnItems.addLayer(e.layer);
