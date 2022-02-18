@@ -1,4 +1,5 @@
 import logging
+import datetime
 import ee
 from ee.ee_exception import EEException
 import hydrafloods as hf
@@ -147,3 +148,21 @@ def landsat8(region,start_time,end_time,cloudmask=True):
 def get_tile_url(ee_image,vis_params):
     map_id_dict = ee.Image(ee_image).getMapId(vis_params)
     return map_id_dict['tile_fetcher'].url_format
+
+def get_download_url(img, region):
+
+	region = ee.Feature(region).geometry()
+
+	now = datetime.datetime.now()
+	now_str = now.strftime("%Y%m%d%H%M%S")
+
+	name = f"hydrafloods_export_{now_str}"
+
+	url = img.getDownloadURL({
+		'name':name,
+		'scale': 30,
+		'crs': 'EPSG:4326',
+		'region': region
+	})
+
+	return url
