@@ -4,7 +4,7 @@ from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import SelectInput, DatePicker, Button, MapView, MVView
 import logging
 from django.http import JsonResponse, HttpResponseNotAllowed
-from .gee.methods import sentinel1,get_tile_url
+from .gee.methods import sentinel1, landsat8, get_tile_url
 import json
 
 log = logging.getLogger(f'tethys.apps.{__name__}')
@@ -123,12 +123,20 @@ def retrieve_layer(request):
         start_date = request.GET.get('start_date', None)
         end_date = request.GET.get('end_date', None)
 
+        sensor = request.GET.get('dataset', None)
 
-        imgs = sentinel1(json.loads(region),start_date,end_date)
-        wurl = get_tile_url(imgs["water"].selfMask(), {"min":0,"max":1,"palette": "darkblue"})
-        surl = get_tile_url(imgs["satellite"], {"bands":"VV","min":-25,"max":0})
+        if sensor == "sentinel1":
+            imgs = sentinel1(json.loads(region),start_date,end_date)
+            wurl = get_tile_url(imgs["water"].selfMask(), {"min":0,"max":1,"palette": "darkblue"})
+            surl = get_tile_url(imgs["satellite"], {"bands":"VV","min":-25,"max":0})
 
-        # log.debug(f'Image Collection URL: {url}')
+        elif sensor == "landsat8":
+            imgs = landsat8(json.loads(region),start_date,end_date)
+            wurl = get_tile_url(imgs["water"].selfMask(), {"min":0,"max":1,"palette": "darkblue"})
+            surl = get_tile_url(imgs["satellite"], {"bands":"swir2,nir,green","min":50,"max":5500})
+
+        else:
+            raise NotImplementedError(f"sensor option {sensor} is not implemented")
 
         response_data.update({
             'success': True,
