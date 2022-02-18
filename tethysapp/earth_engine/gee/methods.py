@@ -113,25 +113,36 @@ def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_spe
     proc = []
     if apply_terrain_correction:
         elv = ee.Image("NASA/NASADEM_HGT/001").select("elevation").unmask(0)
-        buffer = 50
+        buffer = 100
         proc.append([hf.slope_correction,dict(elevation=elv,buffer=buffer)])
 
     if apply_speckle_filter:
         proc.append(hf.gamma_map)
 
-    proc.append([hf.edge_otsu, dict(edge_buffer=300,initial_threshold=-16,scale=120)])
+    proc.append([hf.edge_otsu, dict(edge_buffer=300,initial_threshold=-16,scale=120,thresh_no_data=-15)])
 
     if force_projection:
         proc.append(lambda x: x.reproject(ee.Projection("EPSG:4326").atScale(30)))
 
     water = ds.pipe(proc)
 
-    return {"satellite":ds.collection.mean(),"water": water.collection.mode()}
+    return dict(satellite = ds.collection.mean(), water = water.collection.mode())
 
-def landsat8(region,start_time,end_time):
+def landsat8(region,start_time,end_time,cloudmask=True):
 
-    return
+    region = ee.Feature(region).geometry()
+    ds = hf.Landsat8(region,start_time,end_time,)
 
+    elv = ee.Image("NASA/NASADEM_HGT/001").select("elevation").unmask(0)
+    proc = (
+        # (hf.illumination_correction, dict(elevation=elv,scale=120)),
+        hf.mndwi,
+        (hf.edge_otsu, dict(edge_buffer=300,initial_threshold=0.05,scale=120,invert=True,thresh_no_data=0))
+    )
+
+    water = ds.pipe(proc)
+
+    return dict(satellite = ds.collection.median(), water = water.collection.mode())
 
 def get_tile_url(ee_image,vis_params):
     map_id_dict = ee.Image(ee_image).getMapId(vis_params)
