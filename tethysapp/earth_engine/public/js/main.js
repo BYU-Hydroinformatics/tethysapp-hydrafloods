@@ -25,9 +25,9 @@ function csrfSafeMethod(method) {
 $(function() {
     var satellite = "sentinel1";
     var input_spatial ="";
-    terr_val = 'no';
-    spec_val = 'no';
-    cloud_val = 'no';
+    terr_val = 'yes';
+    spec_val = 'yes';
+    cloud_val = 'yes';
 
     //Start Map //
     var map = L.map('map').setView([8.913648, -79.544706], 10);
