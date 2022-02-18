@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block app_navigation_items %}
-  <li class="separator"></li>  
+  <li class="separator"></li>
   <b class="title">Dataset</b>
   <p class="separator"></p>
     <button type="button" class = "btn btn-primary" data-toggle="buttons" id="sentinel1">Sentinel 1</button>
@@ -14,25 +14,25 @@
   {% gizmo reducer_select %}
   <div>
     <li id = "terrain_correction_p"><strong>Terrain Correction</strong></li>
-    <label class="switch" name="terrain_correction_name" id="terrain_correction_id"> 
-      <input type="checkbox">
-      <span class="slider round"></span> 
+    <label class="switch" name="terrain_correction_name" id="terrain_correction_id">
+      <input id="terrain_correction_check" type="checkbox">
+      <span class="slider round"></span>
     </label>
   </div>
   <p class="separator"></p>
   <div>
     <li id="speckle_filter_p"><strong>Speckle Filter</strong></li>
-    <label class="switch" name="speckle_filter_name" id="speckle_filter_id"> 
-      <input type="checkbox">
-      <span class="slider round"></span> 
+    <label class="switch" name="speckle_filter_name" id="speckle_filter_id">
+      <input id="speckle_filter_check" type="checkbox">
+      <span class="slider round"></span>
     </label>
   </div>
   <p class="separator"></p>
   <div>
     <li id="cloud_mask_p"><strong>Cloud Mask</strong></li>
-    <label class="switch" name="cloud_mask_name" id="cloud_mask_id"> 
-      <input type="checkbox">
-      <span class="slider round"></span> 
+    <label class="switch" name="cloud_mask_name" id="cloud_mask_id">
+      <input id="cloud_mask_check" type="checkbox">
+      <span class="slider round"></span>
     </label>
   </div>
   <p class="separator"></p>

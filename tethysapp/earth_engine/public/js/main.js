@@ -81,6 +81,7 @@ $(function() {
      $("#cloud_mask_p").hide();
      $("#cloud_mask_id").hide();
 
+
      $("#landsat8").click(function(){
         satellite = 'landsat8'
         $("#terrain_correction_id").hide()
@@ -106,15 +107,15 @@ $(function() {
      })
 
      $("#terrain_correction_id").click(function(){
-        terr_val = 'yes'
+        terr_val = $("#terrain_correction_check").is(':checked') ? 'yes' : 'no'
     })
 
     $("#speckle_filter_id").click(function(){
-        spec_val = 'yes'
+        spec_val = $("#speckle_filter_check").is(':checked') ? 'yes' : 'no'
     })
 
     $("#cloud_mask_id").click(function(){
-        cloud_val = 'yes'
+        cloud_val = $("#cloud_mask_check").is(':checked') ? 'yes' : 'no'
     })
 
      $("#load_data").click(function(){
