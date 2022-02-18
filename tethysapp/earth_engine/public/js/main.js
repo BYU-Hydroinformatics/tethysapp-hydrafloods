@@ -160,6 +160,47 @@ $(function() {
          })
      })
 
+     $("#export_data").click(function(){
+         let dataset = satellite;
+         let end_date = $('#end_date').val();
+         let start_date = $('#start_date').val();
+         let red_method = $('#reducer').val();
+         let terrain =  terr_val;
+         let speckle =  spec_val;
+         let cloud = cloud_val;
+
+         var request_obj={
+             'input_spatial':input_spatial,
+             'dataset' : dataset,
+             'start_date': start_date,
+             'end_date': end_date,
+             'red_method': red_method,
+             'terrain': terrain,
+             'speckle': speckle,
+             'cloud': cloud
+         }
+
+         console.log(request_obj);
+         $("#GeneralLoading").removeClass("hidden");
+         $.ajax({
+             type:"GET",
+             url:'get-export/',
+             datatype:"JSON",
+             data:request_obj,
+             success: function(data){
+                $.notify("SUCCESS", "success");
+                 $("#GeneralLoading").addClass("hidden");
+                 console.log(data)
+                 window.open(data["export_url"], '_blank');
+             },
+             error: function(error){
+                $.notify("REQUEST FAILED", "error");
+                 console.log(error)
+                 $("#GeneralLoading").addClass("hidden");
+             }
+         })
+     })
+
      map.on(L.Draw.Event.CREATED, function (e) {
             // console.log('Draw Event Created');
             drawnItems.addLayer(e.layer);
