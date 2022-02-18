@@ -38,8 +38,13 @@ class EarthEngine(TethysAppBase):
                 name='get_image_layer',
                 url='get-image-layer/',
                 controller='earth_engine.controllers.retrieve_layer'
+            ),
+            UrlMap(
+                name='get_export',
+                url='get-export/',
+                controller='earth_engine.controllers.export_layer'
             )
-            
+
         )
 
         return url_maps
