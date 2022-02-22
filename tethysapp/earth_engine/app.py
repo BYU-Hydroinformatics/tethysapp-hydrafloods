@@ -6,7 +6,7 @@ class EarthEngine(TethysAppBase):
     Tethys app class for Earth Engine.
     """
 
-    name = 'Earth Engine'
+    name = 'Water Mapping App'
     index = 'earth_engine:home'
     icon = 'earth_engine/images/earth-engine-logo.png'
     package = 'earth_engine'
