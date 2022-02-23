@@ -10,7 +10,7 @@ body {
 
 #map {
   position: absolute;
-  top: 4%;
+  top: 50px;
   bottom: 0;
   right: 0;
   left: 0;
