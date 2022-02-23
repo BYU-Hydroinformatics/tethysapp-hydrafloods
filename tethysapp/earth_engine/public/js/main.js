@@ -30,7 +30,7 @@ $(function() {
     cloud_val = 'yes';
 
     //Start Map //
-    var map = L.map('map').setView([8.913648, -79.544706], 10);
+    var map = L.map('map').setView([20, -40], 3);
 
     var water_layer = L.tileLayer('',{attribution:
           '<a href="https://earthengine.google.com" target="_">' +
@@ -200,7 +200,7 @@ $(function() {
              }
          })
      })
-
+     
      map.on(L.Draw.Event.CREATED, function (e) {
             // console.log('Draw Event Created');
             drawnItems.addLayer(e.layer);
