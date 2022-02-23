@@ -2,9 +2,10 @@ import json
 import datetime as dt
 from django.shortcuts import render
 from tethys_sdk.permissions import login_required
-from tethys_sdk.gizmos import SelectInput, DatePicker, Button, MapView, MVView
+from tethys_sdk.gizmos import SelectInput, DatePicker
 import logging
 from django.http import JsonResponse, HttpResponseNotAllowed
+from datetime import date
 from .gee.methods import (
     sentinel1,
     landsat8,
@@ -21,10 +22,15 @@ def home(request):
     """
     Controller for the app home page.
     """
-
-    initial_start_date = '2022-01-05'
-    initial_end_date = '2022-01-25'
-    first_product_end_date = '2022-02-08'
+    today = date.today()
+    yesterday = today - dt.timedelta(days=1)
+    month = today - dt.timedelta(days=28)
+    yesterday_val = yesterday.strftime("%Y-%m-%d")
+    month_val = month.strftime("%Y-%m-%d")
+    
+    initial_start_date = month_val
+    initial_end_date = yesterday_val
+    first_product_end_date = yesterday_val
     first_product_start_date = '2010-01-01'
 
     start_date = DatePicker(
