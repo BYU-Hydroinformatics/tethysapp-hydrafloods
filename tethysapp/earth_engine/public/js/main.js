@@ -1,3 +1,8 @@
+var water_layer;
+var image_layer;
+var map;
+var controlL;
+
 // Get a cookie
 function getCookie(name) {
     var cookieValue = null;
@@ -21,6 +26,31 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+// Add method to layer control class
+L.Control.Layers.include({
+    getOverlays: function() {
+      // create hash to hold all layers
+      var control, layers;
+      layers = {};
+      control = this;
+  
+      // loop thru all layers in control
+      control._layers.forEach(function(obj) {
+        var layerName;
+  
+        // check if layer is an overlay
+        if (obj.overlay) {
+          // get name of overlay
+          layerName = obj.name;
+          // store whether it's present on the map or not
+          return layers[layerName] = control._map.hasLayer(obj.layer);
+        }
+      });
+  
+      return layers;
+    }
+  });
+
 // add csrf token to appropriate ajax requests
 $(function() {
     var satellite = "sentinel1";
@@ -30,13 +60,13 @@ $(function() {
     cloud_val = 'yes';
 
     //Start Map //
-    var map = L.map('map').setView([20, -40], 3);
+    map = L.map('map').setView([20, -40], 3);
 
-    var water_layer = L.tileLayer('',{attribution:
+    water_layer = L.tileLayer('',{attribution:
           '<a href="https://earthengine.google.com" target="_">' +
           'Google Earth Engine</a>;'}).addTo(map).bringToFront();
 
-    var image_layer = L.tileLayer('',{attribution:
+    image_layer = L.tileLayer('',{attribution:
           '<a href="https://earthengine.google.com" target="_">' +
           'Google Earth Engine</a>;'}).addTo(map);
 
@@ -53,7 +83,8 @@ $(function() {
     var baseMaps = {"Basemap":positron}
     var varMaps = {"Satellite Observation":image_layer,"Water":water_layer,}
 
-    L.control.layers(baseMaps,varMaps,{position: 'bottomleft'}).addTo(map);
+    controlL = L.control.layers(baseMaps,varMaps,{position: 'bottomleft'})
+    controlL.addTo(map);
 
      // FeatureGroup is to store editable layers
      drawnItems = new L.FeatureGroup().addTo(map);   // FeatureGroup is to store editable layers
@@ -87,7 +118,7 @@ $(function() {
         $("#terrain_correction_id").hide()
         $("#speckle_filter_id").hide();
         $("#cloud_mask_id").show();
-        $("#terrain_correction_p").hide()
+        $("#terrain_correction_p").hide();
         $("#speckle_filter_p").hide();
         $("#cloud_mask_p").show();
         $('button').removeClass('active');
@@ -149,8 +180,12 @@ $(function() {
                 $.notify("SUCCESS", "success");
                  $("#GeneralLoading").addClass("hidden");
                  console.log(data)
-                 water_layer.setUrl(data.water_url)
-                 image_layer.setUrl(data.image_url)
+                //  drawnItems.addClass('hidden')
+                 water_layer.setUrl(data.water_url);
+                 image_layer.setUrl(data.image_url);
+                 map.addLayer(water_layer);
+                 map.addLayer(water_layer);
+                 controlL.getActiveOverlays();
              },
              error: function(error){
                 $.notify("REQUEST FAILED", "error");
@@ -158,6 +193,14 @@ $(function() {
                  $("#GeneralLoading").addClass("hidden");
              }
          })
+     })
+
+     $("#clear_data").click(function(){
+        water_layer.setUrl('');
+        map.removeLayer(water_layer);
+        image_layer.setUrl('');
+        map.removeLayer(image_layer);
+        drawnItems.clearLayers();
      })
 
      $("#export_data").click(function(){
@@ -200,7 +243,7 @@ $(function() {
              }
          })
      })
-     
+
      map.on(L.Draw.Event.CREATED, function (e) {
             // console.log('Draw Event Created');
             drawnItems.addLayer(e.layer);
