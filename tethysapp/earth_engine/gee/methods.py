@@ -111,6 +111,8 @@ def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_spe
     region = ee.Feature(region).geometry()
     ds = hf.Sentinel1(region,start_time,end_time)
 
+    img_check(ds)
+
     proc = []
     if apply_terrain_correction:
         elv = ee.Image("NASA/NASADEM_HGT/001").select("elevation").unmask(0)
@@ -133,6 +135,8 @@ def landsat8(region,start_time,end_time,cloudmask=True):
 
     region = ee.Feature(region).geometry()
     ds = hf.Landsat8(region,start_time,end_time,use_qa=cloudmask)
+
+    img_check(ds)
 
     elv = ee.Image("NASA/NASADEM_HGT/001").select("elevation").unmask(0)
     proc = (
@@ -166,3 +170,12 @@ def get_download_url(img, region):
 	})
 
 	return url
+
+def img_check(ds):
+
+    n_imgs = ds.n_images
+
+    if n_imgs == 0 :
+        raise ValueError("no images found for the space-time domain specified")
+    
+    return

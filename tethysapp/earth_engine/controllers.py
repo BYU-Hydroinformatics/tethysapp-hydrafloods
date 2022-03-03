@@ -1,18 +1,13 @@
 import json
 import datetime as dt
+from urllib import response
 from django.shortcuts import render
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import SelectInput, DatePicker
 import logging
 from django.http import JsonResponse, HttpResponseNotAllowed
 from datetime import date
-from .gee.methods import (
-    sentinel1,
-    landsat8,
-    get_tile_url,
-    get_download_url
-)
-
+from .gee.methods import *
 
 log = logging.getLogger(f'tethys.apps.{__name__}')
 

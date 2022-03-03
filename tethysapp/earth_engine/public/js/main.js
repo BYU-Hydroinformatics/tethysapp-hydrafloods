@@ -177,18 +177,24 @@ $(function() {
              datatype:"JSON",
              data:request_obj,
              success: function(data){
-                $.notify("SUCCESS", "success");
-                 $("#GeneralLoading").addClass("hidden");
-                 console.log(data)
-                //  drawnItems.addClass('hidden')
-                 water_layer.setUrl(data.water_url);
-                 image_layer.setUrl(data.image_url);
-                 map.addLayer(water_layer);
-                 map.addLayer(water_layer);
-                 controlL.getActiveOverlays();
+                console.log(data)
+                if (data["success"] === true) {
+                    $.notify("SUCCESS", "success");
+                    $("#GeneralLoading").addClass("hidden");
+                    //  drawnItems.addClass('hidden')
+                    water_layer.setUrl(data.water_url);
+                    image_layer.setUrl(data.image_url);
+                    map.addLayer(water_layer);
+                    map.addLayer(water_layer);
+                    controlL.getActiveOverlays();
+                }
+                else {
+                    $.notify("REQUEST FAILED: " + data["error"], "error");
+                    $("#GeneralLoading").addClass("hidden");
+                }
              },
              error: function(error){
-                $.notify("REQUEST FAILED", "error");
+                $.notify("REQUEST FAILED: " + data["error"], "error");
                  console.log(error)
                  $("#GeneralLoading").addClass("hidden");
              }
@@ -231,13 +237,20 @@ $(function() {
              datatype:"JSON",
              data:request_obj,
              success: function(data){
-                $.notify("SUCCESS", "success");
-                 $("#GeneralLoading").addClass("hidden");
-                 console.log(data)
-                 window.open(data["export_url"], '_blank');
+                console.log(data)
+                 if (data["success"] === true) {
+                    $.notify("SUCCESS", "success");
+                    $("#GeneralLoading").addClass("hidden");
+                    window.open(data["export_url"], '_blank');
+                 }
+                 else {
+                    $.notify("REQUEST FAILED: " + data["error"], "error");
+                    $("#GeneralLoading").addClass("hidden");
+                 }
+                
              },
              error: function(error){
-                $.notify("REQUEST FAILED", "error");
+                $.notify("REQUEST FAILED: " + data["error"], error);
                  console.log(error)
                  $("#GeneralLoading").addClass("hidden");
              }
