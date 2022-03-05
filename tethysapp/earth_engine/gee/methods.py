@@ -111,6 +111,8 @@ def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_spe
     region = ee.Feature(region).geometry()
     ds = hf.Sentinel1(region,start_time,end_time)
 
+    hand = ee.Image("MERIT/Hydro/v1_0_1").select("hnd").unmask(0)
+
     img_check(ds)
 
     proc = []
@@ -122,7 +124,8 @@ def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_spe
     if apply_speckle_filter:
         proc.append(hf.gamma_map)
 
-    proc.append([hf.edge_otsu, dict(edge_buffer=300,initial_threshold=-16,scale=120,thresh_no_data=-15)])
+    proc.append([hf.edge_otsu, dict(band="VH",edge_buffer=300,initial_threshold=-20,scale=120,thresh_no_data=-18)])
+    proc.append(lambda x: x.And(hand.lt(15)).focal_mode())
 
     if force_projection:
         proc.append(lambda x: x.reproject(ee.Projection("EPSG:4326").atScale(30)))
@@ -136,13 +139,15 @@ def landsat8(region,start_time,end_time,cloudmask=True):
     region = ee.Feature(region).geometry()
     ds = hf.Landsat8(region,start_time,end_time,use_qa=cloudmask)
 
+    hand = ee.Image("MERIT/Hydro/v1_0_1").select("hnd").unmask(0)
+
     img_check(ds)
 
-    elv = ee.Image("NASA/NASADEM_HGT/001").select("elevation").unmask(0)
     proc = (
         # (hf.illumination_correction, dict(elevation=elv,scale=120)),
         hf.mndwi,
-        (hf.edge_otsu, dict(edge_buffer=300,initial_threshold=0.05,scale=120,invert=True,thresh_no_data=0))
+        (hf.edge_otsu, dict(edge_buffer=300,initial_threshold=0.05,scale=120,invert=True,thresh_no_data=0)),
+		lambda x: x.And(hand.lt(15).focal_mode())
     )
 
     water = ds.pipe(proc)
@@ -177,5 +182,5 @@ def img_check(ds):
 
     if n_imgs == 0 :
         raise ValueError("no images found for the space-time domain specified")
-    
+
     return
