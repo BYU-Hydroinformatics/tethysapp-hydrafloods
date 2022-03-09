@@ -31,7 +31,7 @@ body {
   z-index:9999;
 }
 
-#sentinel1, #landsat8, #load_data, #clear_data[type=button] { 
+#sentinel1, #landsat8, #load_data, #clear_data, #export_data[type=button] { 
   outline: none; 
 }
 

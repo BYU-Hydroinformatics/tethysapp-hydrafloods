@@ -150,6 +150,11 @@ $(function() {
     })
 
      $("#load_data").click(function(){
+         if(input_spatial == ''){
+            $.notify("REQUEST FAILED: Please select an area of interest", "warn");
+            return
+         }
+
          let dataset = satellite;
          let end_date = $('#end_date').val();
          let start_date = $('#start_date').val();
@@ -181,22 +186,24 @@ $(function() {
                 if (data["success"] === true) {
                     $.notify("SUCCESS", "success");
                     $("#GeneralLoading").addClass("hidden");
-                    //  drawnItems.addClass('hidden')
                     water_layer.setUrl(data.water_url);
                     image_layer.setUrl(data.image_url);
                     map.addLayer(water_layer);
-                    map.addLayer(water_layer);
-                    controlL.getActiveOverlays();
+                    map.addLayer(image_layer);
+                    // controlL.getActiveOverlays();
+                    $("#export_data").removeClass("hidden");
                 }
                 else {
                     $.notify("REQUEST FAILED: " + data["error"], "error");
                     $("#GeneralLoading").addClass("hidden");
+                    $("#export_data").addClass("hidden");
                 }
              },
              error: function(error){
                 $.notify("REQUEST FAILED: " + data["error"], "error");
                  console.log(error)
                  $("#GeneralLoading").addClass("hidden");
+                 $("#export_data").addClass("hidden");
              }
          })
      })
@@ -207,6 +214,8 @@ $(function() {
         image_layer.setUrl('');
         map.removeLayer(image_layer);
         drawnItems.clearLayers();
+        input_spatial ="";
+        $("#export_data").addClass("hidden");
      })
 
      $("#export_data").click(function(){

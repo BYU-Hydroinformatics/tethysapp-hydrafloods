@@ -19,7 +19,7 @@ def home(request):
     """
     today = date.today()
     yesterday = today - dt.timedelta(days=1)
-    month = today - dt.timedelta(days=28)
+    month = today - dt.timedelta(days=15)
     yesterday_val = yesterday.strftime("%Y-%m-%d")
     month_val = month.strftime("%Y-%m-%d")
     
