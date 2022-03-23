@@ -132,13 +132,17 @@ def retrieve_layer(request):
         speckle = True if request.GET.get('speckle', None) == "yes" else False
         terrain = True if request.GET.get('terrain', None) == "yes" else False
         cloud = True if request.GET.get('cloud', None) == "yes" else False
+        flood = True if request.GET.get('flood_val', None) == "yes" else False
+        flood_method = request.GET.get('water_period', None)
+        threshold = request.GET.get('occurance_thresh', None) if request.GET.get('occurance_thresh', None) != "" else 75
 
         sensor = request.GET.get('dataset', None)
 
         if sensor == "sentinel1":
-            imgs = sentinel1(json.loads(region),start_date,end_date, apply_terrain_correction=terrain,apply_speckle_filter=speckle)
+            imgs = sentinel1(json.loads(region),start_date,end_date, apply_terrain_correction=terrain,apply_speckle_filter=speckle, floods=flood, fmethod=flood_method, fthresh=threshold)
             wurl = get_tile_url(imgs["water"].selfMask(), {"min":0,"max":1,"palette": "darkblue"})
             surl = get_tile_url(imgs["satellite"], {"bands":"VV","min":-25,"max":0})
+            furl = get_tile_url(imgs["flood"].selfMask(), {"min":0,"max":1,"palette": "orangered"})
 
         elif sensor == "landsat8":
             imgs = landsat8(json.loads(region),start_date,end_date,cloudmask=cloud)
@@ -151,7 +155,8 @@ def retrieve_layer(request):
         response_data.update({
             'success': True,
             'water_url': wurl,
-            'image_url': surl
+            'image_url': surl,
+            'flood_url': furl
         })
 
     except Exception as e:
@@ -175,19 +180,26 @@ def export_layer(request):
         speckle = True if request.GET.get('speckle', None) == "yes" else False
         terrain = True if request.GET.get('terrain', None) == "yes" else False
         cloud = True if request.GET.get('cloud', None) == "yes" else False
+        flood = True if request.GET.get('flood_val', None) == "yes" else False
+        flood_method = request.GET.get('water_period', None)
+        threshold = request.GET.get('occurance_thresh', None) if request.GET.get('occurance_thresh', None) != "" else 75
 
         sensor = request.GET.get('dataset', None)
 
         if sensor == "sentinel1":
-            imgs = sentinel1(json.loads(region),start_date,end_date, apply_terrain_correction=terrain,apply_speckle_filter=speckle)
+            imgs = sentinel1(json.loads(region),start_date,end_date, apply_terrain_correction=terrain,apply_speckle_filter=speckle, floods=flood, fmethod=flood_method, fthresh=threshold)
 
         elif sensor == "landsat8":
-            imgs = landsat8(json.loads(region),start_date,end_date,cloudmask=cloud)
+            imgs = landsat8(json.loads(region),start_date,end_date,cloudmask=cloud, floods=flood, fmethod=flood_method, fthresh=threshold)
 
         else:
             raise NotImplementedError(f"sensor option {sensor} is not implemented")
 
+
         img_join = imgs["satellite"].addBands(imgs["water"])
+
+        if flood:
+            img_join = img_join.addBands(imgs["flood"])
 
         export_url = get_download_url(img_join, json.loads(region))
 
