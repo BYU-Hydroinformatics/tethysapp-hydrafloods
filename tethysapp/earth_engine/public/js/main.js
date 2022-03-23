@@ -58,7 +58,7 @@ $(function() {
     var terr_val = 'yes';
     var spec_val = 'yes';
     var cloud_val = 'yes';
-    var flood_val = 'yes';
+    var flood_val = 'no';
     var water_period = '1';
     var occurance_thresh = '75';
 
@@ -69,6 +69,10 @@ $(function() {
     water_layer = L.tileLayer('',{attribution:
           '<a href="https://earthengine.google.com" target="_">' +
           'Google Earth Engine</a>;'}).addTo(map).bringToFront();
+
+    flood_layer = L.tileLayer('',{attribution:
+    '<a href="https://earthengine.google.com" target="_">' +
+    'Google Earth Engine</a>;'}).addTo(map);
 
     image_layer = L.tileLayer('',{attribution:
           '<a href="https://earthengine.google.com" target="_">' +
@@ -85,7 +89,7 @@ $(function() {
         }).addTo(map);
 
     var baseMaps = {"Basemap":positron}
-    var varMaps = {"Satellite Observation":image_layer,"Water":water_layer,}
+    var varMaps = {"Satellite Observation":image_layer,"Water":water_layer, "Flood": flood_layer}
 
     controlL = L.control.layers(baseMaps,varMaps,{position: 'bottomleft'})
     controlL.addTo(map);
@@ -115,6 +119,9 @@ $(function() {
      $("#sentinel1").addClass('active');
      $("#cloud_mask_p").hide();
      $("#cloud_mask_id").hide();
+     $("#cloud_mask_id").hide();
+     $("#water_period_id").hide(); 
+     $("#water_period_p").hide();
 
      function check_flood(water_period, flood_val){
         if(flood_val == 'yes'){
@@ -205,7 +212,7 @@ $(function() {
          let terrain =  terr_val;
          let speckle =  spec_val;
          let cloud = cloud_val;
-         let occurance_thresh = $("#occurance_thresh_p").val();
+         let occurance_thresh = $("#occurance_thresh_id").val();
 
          var request_obj={
              'input_spatial':input_spatial,
@@ -235,6 +242,7 @@ $(function() {
                     $.notify("SUCCESS", "success");
                     $("#GeneralLoading").addClass("hidden");
                     water_layer.setUrl(data.water_url);
+                    flood_layer.setUrl(data.flood_url);
                     image_layer.setUrl(data.image_url);
                     map.addLayer(water_layer);
                     map.addLayer(image_layer);
