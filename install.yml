@@ -13,5 +13,6 @@ requirements:
       - earthengine-api
       - oauth2client
   pip:
+    - hydrafloods
 
 post:
