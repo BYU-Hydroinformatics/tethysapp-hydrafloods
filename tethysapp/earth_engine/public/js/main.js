@@ -60,7 +60,7 @@ $(function() {
     var cloud_val = 'yes';
     var flood_val = 'no';
     var water_period = '1';
-    var occurance_thresh = '75';
+    var occurrence_thresh = '75';
 
 
     //Start Map //
@@ -128,19 +128,19 @@ $(function() {
             $("#water_period_id").show(); 
             $("#water_period_p").show();
             if (water_period == '1'){
-                $("#occurance_thresh_id").addClass('hidden');
-                $("#occurance_thresh_p").addClass('hidden');
+                $("#occurrence_thresh_id").addClass('hidden');
+                $("#occurrence_thresh_p").addClass('hidden');
             }
             else {
-                $("#occurance_thresh_id").removeClass('hidden');
-                $("#occurance_thresh_p").removeClass('hidden');
+                $("#occurrence_thresh_id").removeClass('hidden');
+                $("#occurrence_thresh_p").removeClass('hidden');
             }
         } 
         else {
             $("#water_period_id").hide(); 
             $("#water_period_p").hide();
-            $("#occurance_thresh_id").addClass('hidden');
-            $("#occurance_thresh_p").addClass('hidden');
+            $("#occurrence_thresh_id").addClass('hidden');
+            $("#occurrence_thresh_p").addClass('hidden');
         }  
      }
 
@@ -190,12 +190,12 @@ $(function() {
     $("#water_period_id").change(function(){
         water_period = $("#water_period_id").val();
         if (water_period == '1'){
-            $("#occurance_thresh_id").addClass('hidden');
-            $("#occurance_thresh_p").addClass('hidden');
+            $("#occurrence_thresh_id").addClass('hidden');
+            $("#occurrence_thresh_p").addClass('hidden');
         }
         else {
-            $("#occurance_thresh_id").removeClass('hidden');
-            $("#occurance_thresh_p").removeClass('hidden');
+            $("#occurrence_thresh_id").removeClass('hidden');
+            $("#occurrence_thresh_p").removeClass('hidden');
         }
     })
 
@@ -212,7 +212,7 @@ $(function() {
          let terrain =  terr_val;
          let speckle =  spec_val;
          let cloud = cloud_val;
-         let occurance_thresh = $("#occurance_thresh_id").val();
+         let occurrence_thresh = $("#occurrence_thresh_id").val();
 
          var request_obj={
              'input_spatial':input_spatial,
@@ -225,7 +225,7 @@ $(function() {
              'cloud': cloud,
              'flood_val': flood_val,
              'water_period': water_period,
-             'occurance_thresh': occurance_thresh
+             'occurrence_thresh': occurrence_thresh
 
          }
 
@@ -281,7 +281,7 @@ $(function() {
          let terrain =  terr_val;
          let speckle =  spec_val;
          let cloud = cloud_val;
-         let occurance_thresh = $("#occurance_thresh_p").val();
+         let occurrence_thresh = $("#occurrence_thresh_p").val();
 
          var request_obj={
              'input_spatial':input_spatial,
@@ -294,7 +294,7 @@ $(function() {
              'cloud': cloud,
              'flood_val': flood_val,
              'water_period': water_period,
-             'occurance_thresh': occurance_thresh
+             'occurrence_thresh': occurrence_thresh
          }
 
          console.log(request_obj);
