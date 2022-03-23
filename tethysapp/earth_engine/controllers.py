@@ -134,7 +134,7 @@ def retrieve_layer(request):
         cloud = True if request.GET.get('cloud', None) == "yes" else False
         flood = True if request.GET.get('flood_val', None) == "yes" else False
         flood_method = request.GET.get('water_period', None)
-        threshold = request.GET.get('occurance_thresh', None) if request.GET.get('occurance_thresh', None) != "" else 75
+        threshold = request.GET.get('occurrence_thresh', None) if request.GET.get('occurrence_thresh', None) != "" else 75
 
         sensor = request.GET.get('dataset', None)
 
@@ -145,9 +145,10 @@ def retrieve_layer(request):
             furl = get_tile_url(imgs["flood"].selfMask(), {"min":0,"max":1,"palette": "orangered"})
 
         elif sensor == "landsat8":
-            imgs = landsat8(json.loads(region),start_date,end_date,cloudmask=cloud)
+            imgs = landsat8(json.loads(region),start_date,end_date,cloudmask=cloud, floods=flood, fmethod=flood_method, fthresh=threshold)
             wurl = get_tile_url(imgs["water"].selfMask(), {"min":0,"max":1,"palette": "darkblue"})
             surl = get_tile_url(imgs["satellite"], {"bands":"swir2,nir,green","min":50,"max":5500})
+            furl = get_tile_url(imgs["flood"].selfMask(), {"min":0,"max":1,"palette": "orangered"})
 
         else:
             raise NotImplementedError(f"sensor option {sensor} is not implemented")
@@ -182,7 +183,7 @@ def export_layer(request):
         cloud = True if request.GET.get('cloud', None) == "yes" else False
         flood = True if request.GET.get('flood_val', None) == "yes" else False
         flood_method = request.GET.get('water_period', None)
-        threshold = request.GET.get('occurance_thresh', None) if request.GET.get('occurance_thresh', None) != "" else 75
+        threshold = request.GET.get('occurrence_thresh', None) if request.GET.get('occurrence_thresh', None) != "" else 75
 
         sensor = request.GET.get('dataset', None)
 
