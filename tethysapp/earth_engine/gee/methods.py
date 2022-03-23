@@ -6,7 +6,6 @@ import hydrafloods as hf
 from . import params as gee_account
 # from . import cloud_mask as cm
 
-
 EE_PRODUCTS = {
     'sentinel': {
         '1': {
@@ -106,7 +105,7 @@ def image_to_map_id(image_name, vis_params={}):
 #     except EEException:
 #         log.exception('An error occurred while attempting to retrieve the image collection asset.')
 
-def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_speckle_filter=True,force_projection=True):
+def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_speckle_filter=True,force_projection=True,floods=False,fmethod="yearly",fthresh=75):
 
     region = ee.Feature(region).geometry()
     ds = hf.Sentinel1(region,start_time,end_time)
@@ -132,9 +131,14 @@ def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_spe
 
     water = ds.pipe(proc)
 
-    return dict(satellite = ds.collection.mean(), water = water.collection.mode())
+    if floods:
+        flood_img = apply_flood_map(water,fmethod,fthresh)
+    else: 
+        flood_img = ee.Image()
 
-def landsat8(region,start_time,end_time,cloudmask=True):
+    return dict(satellite = ds.collection.mean(), water = water.collection.mode(), flood = flood_img)
+
+def landsat8(region,start_time,end_time,cloudmask=True,floods=False,fmethod="yearly",fthresh=75):
 
     region = ee.Feature(region).geometry()
     ds = hf.Landsat8(region,start_time,end_time,use_qa=cloudmask)
@@ -152,7 +156,24 @@ def landsat8(region,start_time,end_time,cloudmask=True):
 
     water = ds.pipe(proc)
 
-    return dict(satellite = ds.collection.median(), water = water.collection.mode())
+    if floods:
+        flood_img = apply_flood_map(water,fmethod,fthresh)
+    else: 
+        flood_img = ee.Image()
+
+    return dict(satellite = ds.collection.median(), water = water.collection.mode(), flood = flood_img)
+
+def apply_flood_map(ds,fmethod,fthresh):
+    if fmethod == "1":
+        flood_method = 'yearly'
+    elif fmethod == "2":
+        flood_method = 'seasonal' 
+    elif fmethod == "3":
+        flood_method = 'occurrence'
+
+    flood_ds = ds.apply_func(hf.extract_flood, reference=flood_method, permanent_threshold=int(fthresh))
+    flood_img = flood_ds.collection.mode()
+    return flood_img
 
 def get_tile_url(ee_image,vis_params):
     map_id_dict = ee.Image(ee_image).getMapId(vis_params)
@@ -165,7 +186,7 @@ def get_download_url(img, region):
 	now = datetime.datetime.now()
 	now_str = now.strftime("%Y%m%d%H%M%S")
 
-	name = f"hydrafloods_export_{now_str}"
+	name = f"hydrafloods.export.{now_str}"
 
 	url = img.getDownloadURL({
 		'name':name,
