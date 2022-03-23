@@ -1,8 +1,4 @@
-/* Remove padding on bottom where app-actions section used to be
-#app-content-wrapper #app-content {
-    padding-bottom: 0;
-    background:darkgray;
-} */
+
 body {
   margin: 0;
   padding: 0;
@@ -31,13 +27,23 @@ body {
   z-index:9999;
 }
 
-#sentinel1, #landsat8, #load_data, #clear_data, #export_data[type=button] { 
-  outline: none; 
+#sentinel1, #landsat8, #load_data, #clear_data, #export_data [type=button] { 
+  box-shadow: none;
+  border: none;
+  outline: none;
+}
+
+.form-control:focus {
+  outline: none !important;
+  border: none !important;
+  outline-width: '0' !important;
+  box-shadow: none !important;
 }
 
 .sliderWrapper{
-  display: inline-block;margin:24px 24px 24px 24px
+  display: inline-block;margin:24px 24px 24px 24px;
 }
+
 .sliderWrapper div{
   display: inline-block;line-height:60px;
 }

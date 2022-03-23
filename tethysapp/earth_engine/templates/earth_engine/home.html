@@ -11,7 +11,6 @@
   <p class="separator"></p>
   {% gizmo start_date %}
   {% gizmo end_date %}
-  {% gizmo reducer_select %}
   <div>
     <li id = "terrain_correction_p"><strong>Terrain Correction</strong></li>
     <label class="switch" name="terrain_correction_name" id="terrain_correction_id">
@@ -34,6 +33,28 @@
       <input id="cloud_mask_check" type="checkbox" checked>
       <span class="slider round"></span>
     </label>
+  </div>
+  <p class="separator"></p>
+  <div>
+    <li id="extract_flood_p"><strong>Extract Flood</strong></li>
+    <label class="switch" name="extract_flood_name" id="extract_flood_id">
+      <input id="extract_flood_check" type="checkbox" checked>
+      <span class="slider round"></span>
+    </label>
+  </div>
+  <p class="separator"></p>
+  <div class="form-outline">
+    <label class="form-label" id="water_period_p" for='typeSelect'>Permanent Water</label>
+    <select type = 'select' class="form-control" id = "water_period_id">
+      <option value="1">Past 5 Years</option>
+      <option value="2">Seasonal</option>
+      <option value="3">Long Term History</option>
+    </select>
+  <div>
+  <li class="separator"></li>
+  <div class="form-outline">
+    <label class="form-label hidden" id="occurance_thresh_p" for='typeNumber'>Occurance Threshold</label>
+    <input type="number" id="occurance_thresh_id" class="form-control hidden" placeholder="75"/>
   </div>
   <p class="separator"></p>
   <p class="help">Change variables to select a dataset, then press "Load" to add that product to the map.</p>

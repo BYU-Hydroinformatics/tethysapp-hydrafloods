@@ -55,9 +55,13 @@ L.Control.Layers.include({
 $(function() {
     var satellite = "sentinel1";
     var input_spatial ="";
-    terr_val = 'yes';
-    spec_val = 'yes';
-    cloud_val = 'yes';
+    var terr_val = 'yes';
+    var spec_val = 'yes';
+    var cloud_val = 'yes';
+    var flood_val = 'yes';
+    var water_period = '1';
+    var occurance_thresh = '75';
+
 
     //Start Map //
     map = L.map('map').setView([20, -40], 3);
@@ -112,10 +116,30 @@ $(function() {
      $("#cloud_mask_p").hide();
      $("#cloud_mask_id").hide();
 
+     function check_flood(water_period, flood_val){
+        if(flood_val == 'yes'){
+            $("#water_period_id").show(); 
+            $("#water_period_p").show();
+            if (water_period == '1'){
+                $("#occurance_thresh_id").addClass('hidden');
+                $("#occurance_thresh_p").addClass('hidden');
+            }
+            else {
+                $("#occurance_thresh_id").removeClass('hidden');
+                $("#occurance_thresh_p").removeClass('hidden');
+            }
+        } 
+        else {
+            $("#water_period_id").hide(); 
+            $("#water_period_p").hide();
+            $("#occurance_thresh_id").addClass('hidden');
+            $("#occurance_thresh_p").addClass('hidden');
+        }  
+     }
 
      $("#landsat8").click(function(){
         satellite = 'landsat8'
-        $("#terrain_correction_id").hide()
+        $("#terrain_correction_id").hide();
         $("#speckle_filter_id").hide();
         $("#cloud_mask_id").show();
         $("#terrain_correction_p").hide();
@@ -123,18 +147,20 @@ $(function() {
         $("#cloud_mask_p").show();
         $('button').removeClass('active');
         $(this).addClass('active');
-     })
+        check_flood(water_period, flood_val);
+    })
 
      $("#sentinel1").click(function(){
-        satellite = 'sentinel1'
+        satellite = 'sentinel1';
         $("#terrain_correction_id").show()
         $("#speckle_filter_id").show();
         $("#cloud_mask_id").hide();
-        $("#terrain_correction_p").show()
+        $("#terrain_correction_p").show();
         $("#speckle_filter_p").show();
         $("#cloud_mask_p").hide();
         $('button').removeClass('active');
-        $(this).addClass('active');
+        $(this).addClass('active'); 
+        check_flood(water_period, flood_val);
      })
 
      $("#terrain_correction_id").click(function(){
@@ -147,6 +173,23 @@ $(function() {
 
     $("#cloud_mask_id").click(function(){
         cloud_val = $("#cloud_mask_check").is(':checked') ? 'yes' : 'no'
+    })
+
+    $("#extract_flood_id").click(function(){
+        flood_val = $("#extract_flood_check").is(':checked') ? 'yes' : 'no'
+        check_flood(water_period, flood_val);
+    })
+
+    $("#water_period_id").change(function(){
+        water_period = $("#water_period_id").val();
+        if (water_period == '1'){
+            $("#occurance_thresh_id").addClass('hidden');
+            $("#occurance_thresh_p").addClass('hidden');
+        }
+        else {
+            $("#occurance_thresh_id").removeClass('hidden');
+            $("#occurance_thresh_p").removeClass('hidden');
+        }
     })
 
      $("#load_data").click(function(){
@@ -162,6 +205,7 @@ $(function() {
          let terrain =  terr_val;
          let speckle =  spec_val;
          let cloud = cloud_val;
+         let occurance_thresh = $("#occurance_thresh_p").val();
 
          var request_obj={
              'input_spatial':input_spatial,
@@ -171,7 +215,11 @@ $(function() {
              'red_method': red_method,
              'terrain': terrain,
              'speckle': speckle,
-             'cloud': cloud
+             'cloud': cloud,
+             'flood_val': flood_val,
+             'water_period': water_period,
+             'occurance_thresh': occurance_thresh
+
          }
 
          console.log(request_obj);
@@ -190,7 +238,6 @@ $(function() {
                     image_layer.setUrl(data.image_url);
                     map.addLayer(water_layer);
                     map.addLayer(image_layer);
-                    // controlL.getActiveOverlays();
                     $("#export_data").removeClass("hidden");
                 }
                 else {
@@ -226,6 +273,7 @@ $(function() {
          let terrain =  terr_val;
          let speckle =  spec_val;
          let cloud = cloud_val;
+         let occurance_thresh = $("#occurance_thresh_p").val();
 
          var request_obj={
              'input_spatial':input_spatial,
@@ -235,7 +283,10 @@ $(function() {
              'red_method': red_method,
              'terrain': terrain,
              'speckle': speckle,
-             'cloud': cloud
+             'cloud': cloud,
+             'flood_val': flood_val,
+             'water_period': water_period,
+             'occurance_thresh': occurance_thresh
          }
 
          console.log(request_obj);
