@@ -41,7 +41,7 @@ else:
             service_account_email='',
             filename='',
             private_key_password='notasecret',
-            scopes=ee.oauth.SCOPE + ' https://www.googleapis.com/auth/drive '
+            # scopes=ee.oauth.SCOPE + ' https://www.googleapis.com/auth/drive '
         )
         ee.Initialize(credentials)
 
