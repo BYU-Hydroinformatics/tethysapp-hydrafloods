@@ -19,7 +19,7 @@ setup(
     description='',
     long_description='',
     keywords='',
-    author='Kel Market, Kailey Mohamed, Giovanni Romero',
+    author='Kel Markert, Kailey Mohamed, Giovanni Romero',
     author_email='',
     url='',
     license='',
