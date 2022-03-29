@@ -1,6 +1,6 @@
 import os
 # from .app import EarthEngine as app
-from .. import app
+from . import app
 
 dirname = os.path.dirname(__file__)
 

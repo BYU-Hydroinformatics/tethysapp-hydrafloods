@@ -7,7 +7,7 @@ from tethys_sdk.gizmos import SelectInput, DatePicker
 import logging
 from django.http import JsonResponse, HttpResponseNotAllowed
 from datetime import date
-from .gee.methods import *
+from .methods import *
 
 log = logging.getLogger(f'tethys.apps.{__name__}')
 
