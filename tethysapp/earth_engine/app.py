@@ -1,5 +1,6 @@
 from tethys_sdk.base import TethysAppBase, url_map_maker
 
+from tethys_sdk.app_settings import CustomSetting
 
 class EarthEngine(TethysAppBase):
     """
@@ -48,3 +49,23 @@ class EarthEngine(TethysAppBase):
         )
 
         return url_maps
+    def custom_settings(self):
+        """
+        Example custom_settings method.
+        """
+        custom_settings = (
+            CustomSetting(
+                name='service_account',
+                type=CustomSetting.TYPE_STRING,
+                description='service account mail',
+                required=False
+            ),
+            CustomSetting(
+                name='path_to_json_key',
+                type=CustomSetting.TYPE_STRING,
+                description='The path to json key for authetication',
+                required=False
+            ),
+        )
+
+        return custom_settings

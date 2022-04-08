@@ -15,11 +15,11 @@ resource_files += find_resource_files('tethysapp/' + app_package + '/public', 't
 
 setup(
     name=release_package,
-    version='0.0.1',
+    version='1.1.1',
     description='',
     long_description='',
     keywords='',
-    author='',
+    author='Kel Markert, Kailey Mohamed, Giovanni Romero',
     author_email='',
     url='',
     license='',

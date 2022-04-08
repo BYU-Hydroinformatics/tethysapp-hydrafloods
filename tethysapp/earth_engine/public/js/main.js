@@ -246,6 +246,7 @@ $(function() {
                     image_layer.setUrl(data.image_url);
                     map.addLayer(water_layer);
                     map.addLayer(image_layer);
+                    map.addLayer(flood_layer);
                     $("#export_data").removeClass("hidden");
                 }
                 else {
@@ -268,6 +269,8 @@ $(function() {
         map.removeLayer(water_layer);
         image_layer.setUrl('');
         map.removeLayer(image_layer);
+        flood_layer.setUrl('');
+        map.removeLayer(flood_layer);
         drawnItems.clearLayers();
         input_spatial ="";
         $("#export_data").addClass("hidden");
