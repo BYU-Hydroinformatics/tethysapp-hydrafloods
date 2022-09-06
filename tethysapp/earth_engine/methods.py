@@ -125,6 +125,7 @@ def sentinel1(region,start_time,end_time,apply_terrain_correction=True,apply_spe
 
     proc.append([hf.edge_otsu, dict(band="VH",edge_buffer=300,initial_threshold=-20,scale=120,thresh_no_data=-18)])
     proc.append(lambda x: x.And(hand.lt(15)).focal_mode())
+    proc.append(max_water_mask)
 
     if force_projection:
         proc.append(lambda x: x.reproject(ee.Projection("EPSG:4326").atScale(30)))
@@ -151,7 +152,8 @@ def landsat8(region,start_time,end_time,cloudmask=True,floods=False,fmethod="yea
         # (hf.illumination_correction, dict(elevation=elv,scale=120)),
         hf.mndwi,
         (hf.edge_otsu, dict(edge_buffer=300,initial_threshold=0.05,scale=120,invert=True,thresh_no_data=0)),
-		lambda x: x.And(hand.lt(15).focal_mode())
+		lambda x: x.And(hand.lt(15).focal_mode()),
+        max_water_mask
     )
 
     water = ds.pipe(proc)
@@ -205,3 +207,7 @@ def img_check(ds):
         raise ValueError("no images found for the space-time domain specified")
 
     return
+
+def max_water_mask(img):
+    JRC_MASK = ee.Image("JRC/GSW1_3/GlobalSurfaceWater").select("occurrence").mask().gt(0)
+    return img.And(JRC_MASK)
