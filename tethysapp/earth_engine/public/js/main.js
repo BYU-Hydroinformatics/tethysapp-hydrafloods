@@ -71,8 +71,8 @@ $(function() {
           'Google Earth Engine</a>;'}).addTo(map).bringToFront();
 
     flood_layer = L.tileLayer('',{attribution:
-    '<a href="https://earthengine.google.com" target="_">' +
-    'Google Earth Engine</a>;'}).addTo(map);
+          '<a href="https://earthengine.google.com" target="_">' +
+          'Google Earth Engine</a>;'}).addTo(map);
 
     image_layer = L.tileLayer('',{attribution:
           '<a href="https://earthengine.google.com" target="_">' +
@@ -84,7 +84,7 @@ $(function() {
     //     apikey: "AAPK052bec1846714415aed2c85ddfa15f73KYexWiKoe0Au2nFQprFm_CWnafrYs4Y3MwTI3iqb-QBEwR808TRyXrudF4Za40V-" // Replace with your API key - https://developers.arcgis.com
     // }).addTo(map);
 
-    var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+    var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
           attribution: '©OpenStreetMap, ©CartoDB'
         }).addTo(map);
 
