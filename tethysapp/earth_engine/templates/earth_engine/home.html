@@ -6,8 +6,8 @@
   <li class="separator"></li>
   <b class="title">Dataset</b>
   <p class="separator"></p>
-    <button type="button" class = "btn btn-primary" data-toggle="buttons" id="sentinel1">Sentinel 1</button>
-    <button type="button" class = "btn btn-primary" data-toggle="buttons" id="landsat8">Landsat 8</button>
+    <button type="button" class = "btn btn-primary" data-bs-toggle="buttons" id="sentinel1">Sentinel 1</button>
+    <button type="button" class = "btn btn-primary" data-bs-toggle="buttons" id="landsat8">Landsat 8</button>
   <p class="separator"></p>
   {% gizmo start_date %}
   {% gizmo end_date %}
@@ -60,7 +60,7 @@
   <p class="help">Change variables to select a dataset, then press "Load" to add that product to the map.</p>
   <button type="button" class = "btn btn-primary" id="load_data">Load</button>
   <button type="button" class = "btn btn-danger" id="clear_data">Clear</button>
-  <button type="button" class = "btn btn-success hidden" data-toggle="buttons" id="export_data">Export</button>
+  <button type="button" class = "btn btn-success hidden" data-bs-toggle="buttons" id="export_data">Export</button>
 {% endblock %}
 
 {% block app_content %}
