@@ -17,38 +17,39 @@ class EarthEngine(TethysAppBase):
     tags = ''
     enable_feedback = False
     feedback_emails = []
+    controller_modules = [ 'controllers' ]
 
-    def url_maps(self):
-        """
-        Add controllers
-        """
-        UrlMap = url_map_maker(self.root_url)
+    # def url_maps(self):
+    #     """
+    #     Add controllers
+    #     """
+    #     UrlMap = url_map_maker(self.root_url)
 
-        url_maps = (
-            UrlMap(
-                name='home',
-                url='earth-engine',
-                controller='earth_engine.controllers.home'
-            ),
-            UrlMap(
-                name='get_image_collection',
-                url='earth-engine/get-image-collection',
-                controller='earth_engine.controllers.get_image_collection'
-            ),
-            UrlMap(
-                name='get_image_layer',
-                url='get-image-layer/',
-                controller='earth_engine.controllers.retrieve_layer'
-            ),
-            UrlMap(
-                name='get_export',
-                url='get-export/',
-                controller='earth_engine.controllers.export_layer'
-            )
+    #     url_maps = (
+    #         UrlMap(
+    #             name='home',
+    #             url='earth-engine',
+    #             controller='earth_engine.controllers.home'
+    #         ),
+    #         UrlMap(
+    #             name='get_image_collection',
+    #             url='earth-engine/get-image-collection',
+    #             controller='earth_engine.controllers.get_image_collection'
+    #         ),
+    #         UrlMap(
+    #             name='get_image_layer',
+    #             url='get-image-layer/',
+    #             controller='earth_engine.controllers.retrieve_layer'
+    #         ),
+    #         UrlMap(
+    #             name='get_export',
+    #             url='get-export/',
+    #             controller='earth_engine.controllers.export_layer'
+    #         )
 
-        )
+    #     )
 
-        return url_maps
+    #     return url_maps
     def custom_settings(self):
         """
         Example custom_settings method.
