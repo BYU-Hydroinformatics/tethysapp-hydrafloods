@@ -53,19 +53,19 @@
   <div>
   <li class="separator"></li>
   <div class="form-outline">
-    <label class="form-label hidden" id="occurrence_thresh_p" for='typeNumber'>Occurrence Threshold</label>
-    <input type="number" id="occurrence_thresh_id" class="form-control hidden" placeholder="75"/>
+    <label class="form-label d-none" id="occurrence_thresh_p" for='typeNumber'>Occurrence Threshold</label>
+    <input type="number" id="occurrence_thresh_id" class="form-control d-none" placeholder="75"/>
   </div>
   <p class="separator"></p>
   <p class="help">Change variables to select a dataset, then press "Load" to add that product to the map.</p>
   <button type="button" class = "btn btn-primary" id="load_data">Load</button>
   <button type="button" class = "btn btn-danger" id="clear_data">Clear</button>
-  <button type="button" class = "btn btn-success hidden" data-bs-toggle="buttons" id="export_data">Export</button>
+  <button type="button" class = "btn btn-success d-none" data-bs-toggle="buttons" id="export_data">Export</button>
 {% endblock %}
 
 {% block app_content %}
   <div id="map"></div>
-  <img id="GeneralLoading" class="view-file hidden" src="{% static 'earth_engine/images/loader.gif' %}" />
+  <img id="GeneralLoading" class="view-file d-none" src="{% static 'earth_engine/images/loader.gif' %}" />
 {% endblock %}
 
 {# Use the after_app_content block for modals #}
