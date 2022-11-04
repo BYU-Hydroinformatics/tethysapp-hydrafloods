@@ -8,6 +8,7 @@ import logging
 from django.http import JsonResponse, HttpResponseNotAllowed
 from datetime import date
 from .methods import *
+from tethys_sdk.routing import controller
 
 log = logging.getLogger(f'tethys.apps.{__name__}')
 
