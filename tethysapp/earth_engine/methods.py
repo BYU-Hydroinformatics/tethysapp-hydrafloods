@@ -36,14 +36,15 @@ else:
     try:
         ee.Initialize()
     except EEException as e:
-        from oauth2client.service_account import ServiceAccountCredentials
-        credentials = ServiceAccountCredentials.from_p12_keyfile(
-            service_account_email='',
-            filename='',
-            private_key_password='notasecret',
-            # scopes=ee.oauth.SCOPE + ' https://www.googleapis.com/auth/drive '
-        )
-        ee.Initialize(credentials)
+        print(e)
+        # from oauth2client.service_account import ServiceAccountCredentials
+        # credentials = ServiceAccountCredentials.from_p12_keyfile(
+        #     service_account_email='',
+        #     filename='',
+        #     private_key_password='notasecret',
+        #     # scopes=ee.oauth.SCOPE + ' https://www.googleapis.com/auth/drive '
+        # )
+        # ee.Initialize(credentials)
 
 
 def image_to_map_id(image_name, vis_params={}):
