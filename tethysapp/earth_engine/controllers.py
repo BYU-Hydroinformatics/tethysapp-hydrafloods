@@ -8,11 +8,12 @@ import logging
 from django.http import JsonResponse, HttpResponseNotAllowed
 from datetime import date
 from .methods import *
+from tethys_sdk.routing import controller
 
 log = logging.getLogger(f'tethys.apps.{__name__}')
 
 
-@login_required()
+@controller(name='home',url='earth-engine')
 def home(request):
     """
     Controller for the app home page.
@@ -75,7 +76,7 @@ def home(request):
 
     return render(request, 'earth_engine/home.html', context)
 
-@login_required()
+@controller(name='get_image_collection',url='earth-engine/get_image_collection')
 def get_image_collection(request):
     """
     Controller to handle image collection requests.
@@ -116,6 +117,7 @@ def get_image_collection(request):
 
     return JsonResponse(response_data)
 
+@controller(name='get_image_layer',url='earth-engine/get-image-layer')
 def retrieve_layer(request):
     print("calling retrieve_layers")
     response_data = {'success': False}
@@ -165,6 +167,7 @@ def retrieve_layer(request):
 
     return JsonResponse(response_data)
 
+@controller(name='get_export',url='earth-engine/get-export')
 def export_layer(request):
     print("calling export layer")
     response_data = {'success': False}

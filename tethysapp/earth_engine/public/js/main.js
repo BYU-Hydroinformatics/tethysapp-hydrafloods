@@ -128,19 +128,19 @@ $(function() {
             $("#water_period_id").show(); 
             $("#water_period_p").show();
             if (water_period == '1'){
-                $("#occurrence_thresh_id").addClass('hidden');
-                $("#occurrence_thresh_p").addClass('hidden');
+                $("#occurrence_thresh_id").addClass('d-none');
+                $("#occurrence_thresh_p").addClass('d-none');
             }
             else {
-                $("#occurrence_thresh_id").removeClass('hidden');
-                $("#occurrence_thresh_p").removeClass('hidden');
+                $("#occurrence_thresh_id").removeClass('d-none');
+                $("#occurrence_thresh_p").removeClass('d-none');
             }
         } 
         else {
             $("#water_period_id").hide(); 
             $("#water_period_p").hide();
-            $("#occurrence_thresh_id").addClass('hidden');
-            $("#occurrence_thresh_p").addClass('hidden');
+            $("#occurrence_thresh_id").addClass('d-none');
+            $("#occurrence_thresh_p").addClass('d-none');
         }  
      }
 
@@ -190,12 +190,12 @@ $(function() {
     $("#water_period_id").change(function(){
         water_period = $("#water_period_id").val();
         if (water_period == '1'){
-            $("#occurrence_thresh_id").addClass('hidden');
-            $("#occurrence_thresh_p").addClass('hidden');
+            $("#occurrence_thresh_id").addClass('d-none');
+            $("#occurrence_thresh_p").addClass('d-none');
         }
         else {
-            $("#occurrence_thresh_id").removeClass('hidden');
-            $("#occurrence_thresh_p").removeClass('hidden');
+            $("#occurrence_thresh_id").removeClass('d-none');
+            $("#occurrence_thresh_p").removeClass('d-none');
         }
     })
 
@@ -230,7 +230,7 @@ $(function() {
          }
 
          console.log(request_obj);
-         $("#GeneralLoading").removeClass("hidden");
+         $("#GeneralLoading").removeClass("d-none");
          $.ajax({
              type:"GET",
              url:'get-image-layer/',
@@ -240,26 +240,26 @@ $(function() {
                 console.log(data)
                 if (data["success"] === true) {
                     $.notify("SUCCESS", "success");
-                    $("#GeneralLoading").addClass("hidden");
+                    $("#GeneralLoading").addClass("d-none");
                     water_layer.setUrl(data.water_url);
                     flood_layer.setUrl(data.flood_url);
                     image_layer.setUrl(data.image_url);
                     map.addLayer(water_layer);
                     map.addLayer(image_layer);
                     map.addLayer(flood_layer);
-                    $("#export_data").removeClass("hidden");
+                    $("#export_data").removeClass("d-none");
                 }
                 else {
                     $.notify("REQUEST FAILED: " + data["error"], "error");
-                    $("#GeneralLoading").addClass("hidden");
-                    $("#export_data").addClass("hidden");
+                    $("#GeneralLoading").addClass("d-none");
+                    $("#export_data").addClass("d-none");
                 }
              },
              error: function(error){
                 $.notify("REQUEST FAILED: " + data["error"], "error");
                  console.log(error)
-                 $("#GeneralLoading").addClass("hidden");
-                 $("#export_data").addClass("hidden");
+                 $("#GeneralLoading").addClass("d-none");
+                 $("#export_data").addClass("d-none");
              }
          })
      })
@@ -273,7 +273,7 @@ $(function() {
         map.removeLayer(flood_layer);
         drawnItems.clearLayers();
         input_spatial ="";
-        $("#export_data").addClass("hidden");
+        $("#export_data").addClass("d-none");
      })
 
      $("#export_data").click(function(){
@@ -301,7 +301,7 @@ $(function() {
          }
 
          console.log(request_obj);
-         $("#GeneralLoading").removeClass("hidden");
+         $("#GeneralLoading").removeClass("d-none");
          $.ajax({
              type:"GET",
              url:'get-export/',
@@ -311,19 +311,19 @@ $(function() {
                 console.log(data)
                  if (data["success"] === true) {
                     $.notify("SUCCESS", "success");
-                    $("#GeneralLoading").addClass("hidden");
+                    $("#GeneralLoading").addClass("d-none");
                     window.open(data["export_url"], '_blank');
                  }
                  else {
                     $.notify("REQUEST FAILED: " + data["error"], "error");
-                    $("#GeneralLoading").addClass("hidden");
+                    $("#GeneralLoading").addClass("d-none");
                  }
                 
              },
              error: function(error){
                 $.notify("REQUEST FAILED: " + data["error"], error);
                  console.log(error)
-                 $("#GeneralLoading").addClass("hidden");
+                 $("#GeneralLoading").addClass("d-none");
              }
          })
      })
